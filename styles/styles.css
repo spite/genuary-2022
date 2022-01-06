@@ -1,0 +1,117 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@500&family=Open+Sans:wght@300;600&display=swap");
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: "Open Sans", sans-serif;
+}
+
+html {
+  font-size: 14px;
+}
+
+body {
+  padding: 2em;
+}
+
+#index {
+  color: #202020;
+  font-size: 1rem;
+}
+
+#index ul {
+  list-style-type: none;
+}
+
+#index h1 {
+  margin-bottom: 1em;
+}
+
+#index ul {
+  margin-bottom: 1em;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+a:hover {
+  font-weight: bold;
+}
+
+canvas {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+}
+
+#info {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  pointer-events: none;
+  z-index: 10;
+  padding: 2em;
+  color: white;
+  text-shadow: 1px 1px black;
+}
+
+#info a {
+  color: inherit;
+}
+
+#info h1 {
+  font-family: "Montserrat", sans-serif;
+  margin-bottom: 0.5em;
+  font-size: 1.5rem;
+}
+
+#info h2 {
+  font-family: "Montserrat", sans-serif;
+  font-size: 1rem;
+}
+
+#info p {
+  margin-bottom: 1em;
+}
+
+#info button {
+  color: inherit;
+  cursor: pointer;
+}
+
+button {
+  border: 1px solid white;
+  outline: none;
+  background: none;
+  border-radius: 3px;
+  padding: 0.5em 1em;
+  margin-right: 0.5em;
+  pointer-events: auto;
+  text-shadow: 1px 1px black;
+}
+
+button:hover {
+  background-color: gray;
+}
+
+#info a {
+  pointer-events: auto;
+}
+
+footer {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  padding: 2em;
+  z-index: 10;
+  color: white;
+  text-shadow: 1px 1px black;
+}
