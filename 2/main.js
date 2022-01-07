@@ -124,6 +124,10 @@ window.addEventListener("keydown", (e) => {
   }
 });
 
+document.querySelector("#pauseBtn").addEventListener("click", (e) => {
+  running = !running;
+});
+
 let prevTime = performance.now();
 function render() {
   const time = performance.now();
