@@ -27,8 +27,6 @@ const camera = new PerspectiveCamera(45, 1, 0.1, 100);
 camera.position.set(2, 2, 2);
 camera.lookAt(scene.position);
 
-const controls = new OrbitControls(camera, renderer.domElement);
-
 function resize() {
   const w = window.innerWidth;
   const h = window.innerHeight;
@@ -70,12 +68,17 @@ window.addEventListener("resize", () => resize());
 
 resize();
 
+function getControls() {
+  const controls = new OrbitControls(camera, renderer.domElement);
+  return controls;
+}
+
 export {
   renderer,
   scene,
   addUpdate,
   addResize,
-  controls,
+  getControls,
   camera,
   resize,
   render,

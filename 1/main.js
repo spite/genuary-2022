@@ -1,6 +1,6 @@
 import {
   scene,
-  controls,
+  getControls,
   renderer,
   addResize,
   resize,
@@ -27,6 +27,7 @@ import { dragon } from "../modules/palettes.js";
 import { Post } from "./post.js";
 import { perlin3 } from "../third_party/perlin.js";
 
+const controls = getControls();
 const post = new Post(renderer);
 
 renderer.setClearColor(dragon[0]);
