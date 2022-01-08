@@ -19,11 +19,12 @@ import {
   BufferAttribute,
   TorusBufferGeometry,
   MeshStandardMaterial,
+  GLSL3,
 } from "../third_party/three.module.js";
 import { getFBO } from "../modules/fbo.js";
 import { OrbitControls } from "../third_party/OrbitControls.js";
 
-const vertexShader = `#version 300 es
+const vertexShader = `
 precision highp float;
 
 in vec3 position;
@@ -48,7 +49,7 @@ void main() {
   gl_PointSize = l * 100. / -mvPosition.z; 
 }`;
 
-const fragmentShader = `#version 300 es
+const fragmentShader = `
 precision highp float;
 
 out vec4 color;
@@ -108,6 +109,7 @@ const mat = new RawShaderMaterial({
   uniforms: { ratio: { value: 1 }, colorMap: { value: fbo.texture } },
   vertexShader,
   fragmentShader,
+  glslVersion: GLSL3,
 });
 const mesh = new Points(geo, mat);
 
