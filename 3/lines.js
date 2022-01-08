@@ -75,6 +75,9 @@ function resize(w, h) {
 }
 
 function randomize() {
+  scene.rotation.x = randomInRange(0, 2 * Math.PI);
+  scene.rotation.y = randomInRange(0, 2 * Math.PI);
+  scene.rotation.z = randomInRange(0, 2 * Math.PI);
   addLines();
 }
 
