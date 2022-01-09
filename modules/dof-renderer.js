@@ -5,6 +5,7 @@ import {
   RGBAFormat,
   AdditiveBlending,
   FloatType,
+  GLSL3,
 } from "../third_party/three.module.js";
 import { ShaderPass } from "./ShaderPass.js";
 import { getFBO } from "./fbo.js";
@@ -61,9 +62,9 @@ vec3 calcDir(vec3 position) {
 const particleVS = `
 precision mediump float;
 
-attribute vec3 position;
-attribute float size;
-attribute vec3 color;
+in vec3 position;
+in float size;
+in vec3 color;
 
 uniform mat4 projectionMatrix;
 uniform mat4 modelViewMatrix;
@@ -76,8 +77,8 @@ uniform float dofStrength;
 uniform float dofRange;
 uniform float iso;
 
-varying float vOpacity;
-varying vec3 vColor;
+out float vOpacity;
+out vec3 vColor;
 
 ${calcBokeh}
 
@@ -104,10 +105,10 @@ void main() {
 const linesVS = `
 precision mediump float;
 
-attribute vec3 position;
-attribute vec3 to;
-attribute float size;
-attribute vec3 color;
+in vec3 position;
+in vec3 to;
+in float size;
+in vec3 color;
 
 uniform mat4 projectionMatrix;
 uniform mat4 modelViewMatrix;
@@ -120,8 +121,8 @@ uniform float focalDistance;
 uniform float dofStrength;
 uniform float dofRange;
 
-varying float vOpacity;
-varying vec3 vColor;
+out float vOpacity;
+out vec3 vColor;
 
 ${calcBokeh}
 
@@ -150,25 +151,27 @@ void main() {
 const particleFS = `
 precision mediump float;
 
-varying float vOpacity;
-varying vec3 vColor;
+in float vOpacity;
+in vec3 vColor;
+
+out vec4 color;
 
 void main() {
-  gl_FragColor = vec4(vColor,1.);
-  gl_FragColor= vec4(1.);
+  color = vec4(vColor,1.);
+  color= vec4(1.);
 }
 `;
 
 const finalVS = `
 precision highp float;
 
-attribute vec3 position;
-attribute vec2 uv;
+in vec3 position;
+in vec2 uv;
 
 uniform mat4 modelViewMatrix;
 uniform mat4 projectionMatrix;
 
-varying vec2 vUv;
+out vec2 vUv;
 
 void main() {
   vUv = uv;
@@ -182,12 +185,14 @@ uniform sampler2D colorTexture;
 uniform float samples;
 uniform float exposure;
 
-varying vec2 vUv;
+in vec2 vUv;
+
+out vec4 fragColor;
 
 // https://www.shadertoy.com/view/ttyXzt
 
 void main() {
-  vec4 c = texture2D(colorTexture, vUv);
+  vec4 c = texture(colorTexture, vUv);
   /*float gamma = 2.2;
   vec3 hdrColor = exposure * c.rgb / c.a;
   vec3 mapped = hdrColor / (hdrColor + vec3(1.0));
@@ -210,8 +215,8 @@ void main() {
   // make it pop
   color = smoothstep(.02,.98,color);
   
-  gl_FragColor = vec4(1.-color, 1.);
- // gl_fragColor = vec4(c.a);
+  fragColor = vec4(1.-color, 1.);
+ // fragColor = vec4(c.a);
 }
   `;
 
@@ -234,6 +239,7 @@ class DOFRenderer {
       },
       vertexShader: finalVS,
       fragmentShader: finalFS,
+      glslVersion: GLSL3,
     });
     this.finalPass = new ShaderPass(this.finalShader, 1, 1);
     this.material = new RawShaderMaterial({
@@ -250,6 +256,7 @@ class DOFRenderer {
       vertexShader: particleVS,
       fragmentShader: particleFS,
       transparent: true,
+      glslVersion: GLSL3,
     });
 
     this.lineMaterial = new RawShaderMaterial({
@@ -266,6 +273,7 @@ class DOFRenderer {
       vertexShader: linesVS,
       fragmentShader: particleFS,
       transparent: true,
+      glslVersion: GLSL3,
     });
     this.setParams({
       exposure: 1,
