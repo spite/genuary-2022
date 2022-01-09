@@ -10,7 +10,7 @@ import { perlin3 } from "../third_party/perlin.js";
 import { curl, generateNoiseFunction } from "../modules/curl.js";
 import { MeshLine, MeshLineMaterial } from "./MeshLine.js";
 import { pointsOnSphere } from "../modules/Fibonacci.js";
-import { randomInRange } from "../modules/Maf.js";
+import { randomInRange, parabola } from "../modules/Maf.js";
 
 const WIDTH = 2048;
 const HEIGHT = 2048;
@@ -28,6 +28,22 @@ function getSphere() {
     p.y *= 0.5;
     p.z *= 0.5;
     p.multiplyScalar(scale);
+  }
+  return points;
+}
+
+function getGrid() {
+  const points = [];
+  const step = randomInRange(200, 500);
+  const scale = randomInRange(0.8, 1.2);
+  for (let z = -0.5 * DEPTH; z < 0.5 * DEPTH; z += step) {
+    for (let y = -0.5 * HEIGHT; y < 0.5 * HEIGHT; y += step) {
+      for (let x = -0.5 * WIDTH; x < 0.5 * WIDTH; x += step) {
+        const p = new Vector3(x, y, z);
+        p.multiplyScalar(scale);
+        points.push(p);
+      }
+    }
   }
   return points;
 }
@@ -63,12 +79,12 @@ function getRandom() {
 }
 
 function getPoints() {
-  const mode = Math.floor(Math.random() * 3);
+  const mode = 1; //Math.floor(Math.random() * 3);
   switch (mode) {
     case 0:
       return getPoissonBlock();
     case 1:
-      return getSphere();
+      return getGrid();
     case 2:
       return getRandom();
   }
@@ -142,15 +158,22 @@ const group = new Object3D();
 const res = new Vector2(1, 1);
 
 function renderLines() {
+  const minW = randomInRange(0, 0.5);
+  const maxW = randomInRange(0.5, 1);
+  const wFn = (p) => {
+    return minW + maxW + p;
+  };
   const palette = getPalette();
   const gradient = new GradientLinear(palette);
   const borderPalette = getPalette();
   const borderGradient = new GradientLinear(borderPalette);
   const borderColor = borderGradient.getAt(Math.random());
-  const LINEWIDTH = randomInRange(0.04, 0.08);
+  const minLw = randomInRange(0.02, 0.04);
+  const maxLw = randomInRange(0.04, 0.08);
+  const LINEWIDTH = randomInRange(minLw, maxLw);
   const points = getPoints();
   const fn = generateNoiseFunction();
-  const scale = randomInRange(0.0001, 0.0005);
+  const scale = randomInRange(0.0002, 0.0005);
   const colorScale = randomInRange(0.0001, 0.0005);
   let id = 1;
   const LENGTH = 400;
@@ -175,7 +198,6 @@ function renderLines() {
     let tx = pt.x;
     let ty = pt.y;
     let tz = pt.z;
-    let d = new Vector3();
 
     const positions = [];
     const speed = randomInRange(10, 20);
@@ -214,6 +236,7 @@ function renderLines() {
       if (!clip) {
         pos.multiplyScalar(scale);
         const dir = curl(pos, fn);
+        dir.normalize();
         prev.lerp(dir, 0.05);
 
         pos.set(tx / WIDTH, ty / HEIGHT, tz / DEPTH);
@@ -237,7 +260,7 @@ function renderLines() {
       borderColor,
     });
 
-    mLine.setPoints(positions);
+    mLine.setPoints(positions, wFn);
     const mesh = new Mesh(mLine, lineMat);
     group.add(mesh);
     id++;

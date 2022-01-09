@@ -49,8 +49,9 @@ class MeshLine extends BufferGeometry {
     this.widthCallback = null;
   }
 
-  setPoints(points) {
+  setPoints(points, widthCallback = null) {
     this.positions.length = 0;
+    this.widthCallback = widthCallback;
 
     for (var j = 0; j < points.length; j++) {
       var p = points[j];
@@ -364,7 +365,6 @@ class MeshLineMaterial extends Material {
       if( c.a < alphaTest ) discard;
       color = c;
       color.a *= step(vCounters,visibility);
-      // color.rgb = mix(vec3(1.), color.rgb, vDepth);
       float w = fwidth(vUV.x) * 2.;
       float h = fwidth(vUV.y) * 2.;
       float f0 = aastep(w, vUV.x);
