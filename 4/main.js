@@ -24,14 +24,15 @@ const controls = getControls();
 function randomize() {
   const palette = getPalette();
   const gradient = new GradientLinear(palette);
-  renderer.setClearColor(gradient.getAt(Math.random()), 1);
+  const c = gradient.getAt(Math.random());
+  renderer.setClearColor(c, 1);
   while (group.children.length) {
     const m = group.children[0];
     group.remove(m);
     m.geometry.dispose();
   }
 
-  renderLines();
+  renderLines(c);
 }
 
 window.addEventListener("keydown", (e) => {

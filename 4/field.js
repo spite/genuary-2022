@@ -157,7 +157,7 @@ const pos = new Vector3();
 const group = new Object3D();
 const res = new Vector2(1, 1);
 
-function renderLines() {
+function renderLines(borderColor) {
   const minW = randomInRange(0, 0.5);
   const maxW = randomInRange(0.5, 1);
   const wFn = (p) => {
@@ -165,9 +165,10 @@ function renderLines() {
   };
   const palette = getPalette();
   const gradient = new GradientLinear(palette);
-  const borderPalette = getPalette();
-  const borderGradient = new GradientLinear(borderPalette);
-  const borderColor = borderGradient.getAt(Math.random());
+  // const borderPalette = getPalette();
+  // const borderGradient = new GradientLinear(borderPalette);
+  // const borderColor = borderGradient.getAt(Math.random());
+  const borderWidth = randomInRange(2, 4);
   const minLw = randomInRange(0.02, 0.04);
   const maxLw = randomInRange(0.04, 0.08);
   const LINEWIDTH = randomInRange(minLw, maxLw);
@@ -177,7 +178,7 @@ function renderLines() {
   const colorScale = randomInRange(0.0001, 0.0005);
   let id = 1;
   const LENGTH = 400;
-  const clipMode = Math.floor(Math.random() * 3);
+  const clipMode = 2; // Math.floor(Math.random() * 3);
   const colorNoise = [];
   for (const p of points) {
     let tx = p.x;
@@ -258,6 +259,7 @@ function renderLines() {
       far: 100, //camera.far,
       element: id,
       borderColor,
+      borderWidth,
     });
 
     mLine.setPoints(positions, wFn);

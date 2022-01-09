@@ -336,6 +336,7 @@ class MeshLineMaterial extends Material {
     uniform vec2 repeat;
     uniform float element;
     uniform vec3 borderColor;
+    uniform float borderWidth;
 
     in float vDepth;
     in vec2 vUV;
@@ -365,8 +366,8 @@ class MeshLineMaterial extends Material {
       if( c.a < alphaTest ) discard;
       color = c;
       color.a *= step(vCounters,visibility);
-      float w = fwidth(vUV.x) * 2.;
-      float h = fwidth(vUV.y) * 2.;
+      float w = fwidth(vUV.x) * borderWidth;
+      float h = fwidth(vUV.y) * borderWidth;
       float f0 = aastep(w, vUV.x);
       float f1 = 1. - aastep(1.-w, vUV.x);
       float f2 = aastep(h, vUV.y);
@@ -402,6 +403,7 @@ class MeshLineMaterial extends Material {
     this.repeat = check(parameters.repeat, new Vector2(1, 1));
     this.element = parameters.element;
     this.borderColor = check(parameters.borderColor, new Vector3(0));
+    this.borderWidth = check(parameters.borderWidth, 0);
 
     var material = new RawShaderMaterial({
       uniforms: {
@@ -424,6 +426,7 @@ class MeshLineMaterial extends Material {
         repeat: { value: this.repeat },
         element: { value: this.element },
         borderColor: { value: this.borderColor },
+        borderWidth: { value: this.borderWidth },
       },
       vertexShader: vertexShaderSource,
       fragmentShader: fragmentShaderSource,
@@ -449,6 +452,7 @@ class MeshLineMaterial extends Material {
     delete parameters.repeat;
     delete parameters.element;
     delete parameters.borderColor;
+    delete parameters.borderWidth;
 
     material.type = "MeshLineMaterial";
 
