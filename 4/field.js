@@ -249,6 +249,4 @@ function setSize(w, h) {
   res.set(w, h);
 }
 
-renderLines();
-
 export { group, setSize, renderLines, getPalette };

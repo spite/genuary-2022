@@ -54,5 +54,6 @@ function myResize(w, h) {
 }
 addResize(myResize);
 
+randomize();
 resize();
 render();
