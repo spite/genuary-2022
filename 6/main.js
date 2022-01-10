@@ -13,8 +13,8 @@ import {
   Vector3,
   Matrix4,
 } from "../third_party/three.module.js";
-import { MeshLine, MeshLineMaterial } from "../modules/meshline.js";
-import { randomInRange, TAU, parabola, map } from "../modules/maf.js";
+import { MeshLine, MeshLineMaterial } from "../modules/Meshline.js";
+import { randomInRange, TAU, parabola, map } from "../modules/Maf.js";
 // import { palette2 as palette } from "../modules/floriandelooij.js";
 // import { gradientLinear } from "../modules/gradient.js";
 
