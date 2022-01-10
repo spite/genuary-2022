@@ -13,7 +13,7 @@ import {
   Vector3,
   Matrix4,
 } from "../third_party/three.module.js";
-import { MeshLine, MeshLineMaterial } from "../modules/Meshline.js";
+import { MeshLine, MeshLineMaterial } from "../modules/MeshLine.js";
 import { randomInRange, TAU, parabola, map } from "../modules/Maf.js";
 
 const group = new Group();
