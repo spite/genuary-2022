@@ -15,19 +15,6 @@ import {
 } from "../third_party/three.module.js";
 import { MeshLine, MeshLineMaterial } from "../modules/Meshline.js";
 import { randomInRange, TAU, parabola, map } from "../modules/Maf.js";
-// import { palette2 as palette } from "../modules/floriandelooij.js";
-// import { gradientLinear } from "../modules/gradient.js";
-
-// palette.range = [
-//   "#F62D62",
-//   "#FFFFFF",
-//   "#FDB600",
-//   "#F42D2D",
-//   "#544C98",
-//   "#ECACBC",
-// ];
-
-// const gradient = new gradientLinear(palette.range);
 
 const group = new Group();
 const controls = getControls();
@@ -58,11 +45,6 @@ function prepareMesh(points, w, color) {
     lineWidth: w,
     near: camera.near,
     far: camera.far,
-    // alphaTest: 0.75 * 0.5,
-    // depthWrite: true,
-    // depthTest: true,
-    // transparent: true,
-    // opacity: 0.75,
   });
 
   var mesh = new Mesh(g, material);
