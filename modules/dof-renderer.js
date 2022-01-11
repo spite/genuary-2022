@@ -60,7 +60,7 @@ vec3 calcDir(vec3 position) {
 `;
 
 const particleVS = `
-precision mediump float;
+precision highp float;
 
 in vec3 position;
 in float size;
@@ -103,7 +103,7 @@ void main() {
 `;
 
 const linesVS = `
-precision mediump float;
+precision highp float;
 
 in vec3 position;
 in vec3 to;
@@ -149,7 +149,7 @@ void main() {
 }`;
 
 const particleFS = `
-precision mediump float;
+precision highp float;
 
 in float vOpacity;
 in vec3 vColor;
