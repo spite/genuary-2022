@@ -10,7 +10,7 @@ import {
 import { Trail } from "./trail.js";
 import { Post } from "./post.js";
 import { onVisibilityChange } from "../modules/visibility.js";
-import { capture } from "../modules/capture.js";
+// import { capture } from "../modules/capture.js";
 
 const controls = getControls();
 
@@ -76,12 +76,12 @@ function render() {
   }
   // renderer.render(scene, camera);
   post.render(scene, camera);
-  capture(renderer.domElement);
+  // capture(renderer.domElement);
 
-  if (time > 22000 && window.capturer.capturing) {
-    window.capturer.stop();
-    window.capturer.save();
-  }
+  // if (time > 22000 && window.capturer.capturing) {
+  //   window.capturer.stop();
+  //   window.capturer.save();
+  // }
 
   renderer.setAnimationLoop(render);
 }
@@ -97,7 +97,7 @@ addResize(myResize);
 resize();
 render();
 
-window.start = () => {
-  time = 0;
-  window.capturer.start();
-};
+// window.start = () => {
+//   time = 0;
+//   window.capturer.start();
+// };
