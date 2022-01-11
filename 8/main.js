@@ -9,7 +9,6 @@ import {
 
 import { Trail } from "./trail.js";
 import { Post } from "./post.js";
-import { onVisibilityChange } from "../modules/visibility.js";
 // import { capture } from "../modules/capture.js";
 
 const controls = getControls();
@@ -49,11 +48,6 @@ document.querySelector("#pauseBtn").addEventListener("click", (e) => {
 
 document.querySelector("#spinBtn").addEventListener("click", (e) => {
   spin = !spin;
-});
-
-onVisibilityChange((hidden) => {
-  prevTime = performance.now();
-  running = !hidden;
 });
 
 let time = 0;
