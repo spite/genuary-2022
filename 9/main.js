@@ -210,6 +210,10 @@ document.querySelector("#pauseBtn").addEventListener("click", (e) => {
   running = !running;
 });
 
+document.querySelector("#randomizeBtn").addEventListener("click", (e) => {
+  randomize();
+});
+
 function render() {
   const dt = 0.001;
   if (running) {
