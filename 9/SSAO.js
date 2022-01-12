@@ -221,6 +221,7 @@ class SSAO {
     this.positions = this.renderTarget.texture[1];
     this.normals = this.renderTarget.texture[2];
 
+    const s = 1;
 
     this.ssaoShader = new RawShaderMaterial({
       uniforms: {
