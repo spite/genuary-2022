@@ -174,15 +174,14 @@ void main() {
 
   vec4 color = texture(colorMap, vUv);
   color.rgb = screen(color.rgb, acCol.rgb, .1);
-
-	color.rgb = clamp(color.rgb, vec3(0.), vec3(1.));
+	// color.rgb = clamp(color.rgb, vec3(0.), vec3(1.));
 	vec3 hsl = rgb2hsv(color.rgb);
-	hsl.z -= .5 * occlusion;//* (1.-hsl.z);
+	hsl.z *= 1.-1.5*occlusion;//* (1.-hsl.z);
+  hsl.z = clamp(0., 1., hsl.z);
 	// vec3 finalColor = czm_saturation(hsv2rgb(hsl), 1.5 + occlusion);
   vec3 finalColor = hsv2rgb(hsl);
 
 	fragColor = vec4(finalColor.rgb, 1. );
-  // fragColor = color;
   // fragColor = vec4(.5 + .5 * normal, 1.);
 }`;
 
@@ -223,7 +222,7 @@ class SSAO {
     this.positions = this.renderTarget.texture[1];
     this.normals = this.renderTarget.texture[2];
 
-    const s = 2;
+    const s = 1;
 
     this.ssaoShader = new RawShaderMaterial({
       uniforms: {
