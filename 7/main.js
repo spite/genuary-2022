@@ -25,6 +25,29 @@ import { shader as noise2d } from "../shaders/noise2d.js";
 import { Post } from "./post.js";
 import { randomInRange } from "../modules/Maf.js";
 import { OBJLoader } from "../third_party/OBJLoader.js";
+import { GLTFLoader } from "../third_party/GLTFLoader.js";
+import {} from "../modules/konami.js";
+
+const gltfLoader = new GLTFLoader();
+
+let suzanneGeo;
+
+async function loadSuzanne() {
+  return new Promise((resolve, reject) => {
+    gltfLoader.load("../assets/suzanne.glb", (res) => {
+      const geo = res.scenes[0].children[0].geometry;
+      geo.rotateX(-Math.PI / 2);
+      resolve(geo);
+    });
+  });
+}
+
+window.addEventListener("konami-code", async () => {
+  if (!suzanneGeo) {
+    suzanneGeo = await loadSuzanne();
+  }
+  mesh.geometry = suzanneGeo;
+});
 
 async function loadModel(file) {
   return new Promise((resolve, reject) => {
@@ -288,8 +311,8 @@ function render() {
   renderer.setAnimationLoop(render);
 }
 
-function myResize(w, h) {
-  post.setSize(w, h);
+function myResize(w, h, dpr) {
+  post.setSize(w * dpr, h * dpr);
 }
 addResize(myResize);
 
