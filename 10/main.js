@@ -277,12 +277,17 @@ function reset() {
   acc.set(0, 0, 0);
 }
 
+let spinning = true;
+
 window.addEventListener("keydown", (e) => {
   if (e.code === "Space") {
     running = !running;
   }
   if (e.code === "KeyR") {
     reset();
+  }
+  if (e.code === "KeyS") {
+    spinning = !spinning;
   }
 });
 
@@ -294,6 +299,10 @@ document.querySelector("#resetBtn").addEventListener("click", (e) => {
   reset();
 });
 
+document.querySelector("#spinBtn").addEventListener("click", (e) => {
+  spinning = !spinning;
+});
+
 const speed = new Vector3();
 const acc = new Vector3();
 
@@ -302,6 +311,10 @@ let frames = 0;
 function render() {
   if (running) {
     updateNoise();
+  }
+
+  if (spinning) {
+    group.rotation.y -= 0.001;
   }
 
   speed.add(dir);
