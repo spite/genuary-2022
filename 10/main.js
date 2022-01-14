@@ -25,7 +25,7 @@ import {
   Vector2,
   Group,
 } from "../third_party/three.module.js";
-import { clamp } from "../modules/Maf.js";
+import { clamp, randomInRange } from "../modules/Maf.js";
 import { Post } from "./post.js";
 // import { capture } from "../modules/capture.js";
 
@@ -163,10 +163,11 @@ function rot2d(x, y, a) {
   return [Math.cos(a) * x - Math.sin(a) * y, Math.sin(a) * x + Math.cos(a) * y];
 }
 
+const seed = randomInRange(-1000, 1000);
 function updateNoise() {
   const t = performance.now() / 10000;
   const r = 5;
-  const ox = t + r * Math.cos(t);
+  const ox = seed + t + r * Math.cos(t);
   const oy = r * Math.sin(t);
   const a = t * 1.1;
   const s = 2 + perlin2(t, oy);
@@ -263,7 +264,7 @@ function getGradient(x, y, h, dir) {
   const h3 = h - data[(y * W + (x + 1)) * 3];
   const dy = h0 > h1 ? -1 : 1;
   const dx = h2 > h3 ? -1 : 1;
-  dir.set(dx, 0, -dy).normalize().multiplyScalar(0.0005);
+  dir.set(dx, 0, -dy).multiplyScalar(0.0005);
 }
 
 const arrowHelper = new ArrowHelper(dir, ball.position, 0.1, 0xff00ff);
