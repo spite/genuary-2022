@@ -15,13 +15,10 @@ import {
   MeshNormalMaterial,
   Object3D,
   RawShaderMaterial,
-  TorusBufferGeometry,
   Vector3,
   Vector4,
   DynamicDrawUsage,
   TextureLoader,
-  BufferGeometry,
-  BufferAttribute,
   PlaneBufferGeometry,
   Group,
 } from "../third_party/three.module.js";
@@ -475,6 +472,14 @@ function render() {
     s.grow();
   }
   post.render(scene, camera);
+
+  // capture(renderer.domElement);
+
+  // if (frames > 10 * 60 && window.capturer.capturing) {
+  //   window.capturer.stop();
+  //   window.capturer.save();
+  // }
+
   renderer.setAnimationLoop(render);
 }
 
