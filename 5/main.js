@@ -25,7 +25,7 @@ import * as dat from "../third_party/dat.gui.module.js";
 
 class Params {
   constructor() {
-    this.exposure = 1;
+    this.exposure = 0.1;
     this.iso = 1;
     this.focalDistance = 50;
     this.dofStrength = 2;
@@ -59,6 +59,7 @@ function syncParams() {
 // }
 
 const dofRenderer = new DOFRenderer(renderer);
+dofRenderer.finalShader.uniforms.invert.value = true;
 
 const controls = getControls();
 
@@ -161,7 +162,7 @@ function blendShape(s0, s1) {
   const fRot = randomInRange(0.05, 0.05);
   const fScale = randomInRange(9, 12);
 
-  const STEPS = 50;
+  const STEPS = 500;
   const p = new Vector2();
   const shapes = [];
   for (let i = 0; i < STEPS; i++) {

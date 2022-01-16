@@ -93,7 +93,7 @@ void main() {
   vColor *= iso;
   vColor *= vOpacity;
   //vColor = 1.-vec3((mvPosition.w-.1)/(1000.-.1)) ;
-  vColor = clamp(vec3(0.), vColor, vColor);
+  vColor = clamp(vColor, vec3(0.), vColor);
 
   mvPosition.xy += dir.xy * r;
   gl_Position = projectionMatrix * mvPosition;
@@ -139,13 +139,11 @@ void main() {
   vColor *= iso;
   vColor *= vOpacity;
   //vColor = 1.-vec3((mvPosition.w-.1)/(1000.-.1)) ;
-  vColor = clamp(vec3(0.), vColor, vColor);
+  vColor = clamp(vColor, vec3(0.), vColor);
 
   mvPosition.xy += dir.xy * r ;
   gl_Position = projectionMatrix * mvPosition;
   gl_PointSize = 1.;// + r;
-  
-
 }`;
 
 const particleFS = `
@@ -158,7 +156,6 @@ out vec4 color;
 
 void main() {
   color = vec4(vColor,1.);
-  color= vec4(1.);
 }
 `;
 
@@ -184,6 +181,7 @@ precision highp float;
 uniform sampler2D colorTexture;
 uniform float samples;
 uniform float exposure;
+uniform bool invert;
 
 in vec2 vUv;
 
@@ -215,7 +213,11 @@ void main() {
   // make it pop
   color = smoothstep(.02,.98,color);
   
-  fragColor = vec4(1.-color, 1.);
+  if(invert) {
+    fragColor = vec4(1. - color, 1.);
+  } else {
+    fragColor = vec4(color, 1.);
+  }
  // fragColor = vec4(c.a);
 }
   `;
@@ -236,6 +238,7 @@ class DOFRenderer {
         colorTexture: { value: this.colorFBO.texture },
         samples: { value: 0 },
         exposure: { value: 0 },
+        invert: { value: false },
       },
       vertexShader: finalVS,
       fragmentShader: finalFS,
