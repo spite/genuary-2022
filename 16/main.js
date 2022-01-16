@@ -52,6 +52,8 @@ gui.add(params, "exposure", 0.01, 1).listen();
 gui.add(params, "focalDistance", 0, 100).listen();
 gui.add(params, "dofStrength", 0.01, 3).listen();
 gui.add(params, "dofRange", 0, 1).listen();
+// dat.GUI.toggleHide();
+gui.closed = true;
 
 function syncParams() {
   dofRenderer.setParams({
