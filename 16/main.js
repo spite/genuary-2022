@@ -41,7 +41,7 @@ class Params {
     this.iso = 1;
     this.focalDistance = 13;
     this.dofStrength = 2;
-    this.dofRange = 0.01;
+    this.dofRange = 0.04;
   }
 }
 const params = new Params();
