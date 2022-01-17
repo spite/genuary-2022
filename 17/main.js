@@ -186,7 +186,7 @@ const mat = new RawShaderMaterial({
     speed: { value: 1 },
     offset: { value: 0 },
     scale: { value: new Vector2(480, 30) },
-    matCap: { value: loader.load("../assets/matcap-black.png") },
+    matCap: { value: loader.load("../assets/matcap_2k.jpg") },
   },
   vertexShader,
   fragmentShader,
@@ -205,11 +205,13 @@ function randomize() {
   group.add(mesh);
 }
 
-randomize();
+const geo = generateTorusKnot(3, 1, 1, 1)();
+mesh = new Mesh(geo, mat);
+group.add(mesh);
 
 scene.add(group);
 
-camera.position.set(0, 0, 1);
+camera.position.set(2, -4.5, 3.25).normalize();
 camera.lookAt(new Vector3(0, 0, 0));
 // camera.rotation.z -= PI / 2;
 renderer.setClearColor(0x050505, 1);
