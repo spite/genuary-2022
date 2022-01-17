@@ -102,7 +102,6 @@ const fragmentShader = `precision highp float;
 
 out vec4 color;
 
-uniform sampler2D matCapMap;
 uniform sampler2D envMap;
 uniform vec3 cameraPosition;
 
@@ -143,8 +142,8 @@ float luma(in vec4 c) {
 }
 
 float atan2(in float y, in float x) {
-  bool s = (abs(x) > abs(y));
-  return mix(PI/2.0 - atan(x,y), atan(y,x), s);
+  float angle = asin(x) > 0. ? acos(y) : -acos(y);
+  return angle;
 }
 
 ${noise2d}
