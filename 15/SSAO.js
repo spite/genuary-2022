@@ -49,10 +49,11 @@ float atan2(in float y, in float x) {
 
 vec2 rotate(vec2 v, float inc) {
   float r = length(v);
-  float a = atan2(v.y, v.x);
+  float a = atan(v.y, v.x);
 	float s = sin(a+inc);
 	float c = cos(a+inc);
 	return vec2(r * c, r * s);
+  // return v;
 }
 
 float map(vec3 p) {
@@ -72,11 +73,10 @@ void main() {
   vec3 p = position;
   if(position.y>0.) {
     vec2 pp = position.xy;
-    // vec2 pp = rotate(position.xy, time);
     n = .5 + .5 * map(s * vec3(pp.xy + vec2(time, 0.), z));
-    n *= 2. + parabola(pp.x / 5. + .5, 1.);
-    n *= 2. * height;
-    n += .4;
+    n *= parabola(pp.x / 10. + .5, 1.);
+    n *= 8. * height;
+    // n += .4;
     h = position.z;
     p += vec3(0., n, 0.);
     p.y *= parabola(clamp(z/9.5 + .5, 0., 1.), 1.);
