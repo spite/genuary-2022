@@ -19,7 +19,7 @@ import {
   Quaternion,
   Vector3,
   PCFShadowMap,
-  BoxBufferGeometry,
+  Mesh,
 } from "../third_party/three.module.js";
 import { VHS } from "./VHS.js";
 import { RoundedBoxGeometry } from "../third_party/RoundedBoxGeometry.js";
@@ -28,6 +28,40 @@ import { getLemniscatePoint } from "../modules/lemniscate.js";
 import { GradientLinear } from "../modules/gradient-linear.js";
 import { Post } from "./post.js";
 import { Curves } from "../third_party/CurveExtras.js";
+import {} from "../modules/konami.js";
+import { GLTFLoader } from "../third_party/GLTFLoader.js";
+
+const gltfLoader = new GLTFLoader();
+
+let suzanneGeo;
+
+async function loadSuzanne() {
+  return new Promise((resolve, reject) => {
+    gltfLoader.load("../assets/suzanne.glb", (res) => {
+      const geo = res.scenes[0].children[0].geometry;
+      geo.rotateX(-Math.PI / 2);
+      resolve(geo);
+    });
+  });
+}
+
+window.addEventListener("konami-code", async () => {
+  if (suzanneGeo) return;
+  if (!suzanneGeo) {
+    suzanneGeo = await loadSuzanne();
+  }
+  const mesh = new Mesh(
+    suzanneGeo,
+    new MeshStandardMaterial({
+      color: getPalette().getAt(Math.random()),
+      roughness: 0.4,
+      metalness: 0,
+    })
+  );
+  scene.add(mesh);
+  mesh.castShadow = mesh.receiveShadow = true;
+  object.visible = false;
+});
 
 const controls = getControls();
 
@@ -47,6 +81,14 @@ directionalLight.position.set(-2, 2, 2);
 directionalLight.castShadow = true;
 directionalLight.shadow.camera.near = -1;
 directionalLight.shadow.camera.far = 10;
+
+const d = 1;
+
+directionalLight.shadow.camera.left = -d * 1.5;
+directionalLight.shadow.camera.right = d * 1.5;
+directionalLight.shadow.camera.top = d;
+directionalLight.shadow.camera.bottom = -d;
+
 scene.add(directionalLight);
 
 const directionalLight2 = new DirectionalLight(0xffffff, 0.5);
@@ -54,6 +96,12 @@ directionalLight2.position.set(1, 2, 1);
 directionalLight2.castShadow = true;
 directionalLight2.shadow.camera.near = -4;
 directionalLight2.shadow.camera.far = 10;
+
+directionalLight2.shadow.camera.left = -d * 1.5;
+directionalLight2.shadow.camera.right = d * 1.5;
+directionalLight2.shadow.camera.top = d;
+directionalLight2.shadow.camera.bottom = -d;
+
 scene.add(directionalLight2);
 
 const ambientLight = new AmbientLight(0x808080, 0.5);
