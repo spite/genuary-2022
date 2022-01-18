@@ -19,6 +19,7 @@ import {
   Quaternion,
   Vector3,
   PCFShadowMap,
+  BoxBufferGeometry,
 } from "../third_party/three.module.js";
 import { VHS } from "./VHS.js";
 import { RoundedBoxGeometry } from "../third_party/RoundedBoxGeometry.js";
@@ -182,6 +183,7 @@ function updateObject(t) {
 }
 
 let running = true;
+let postProcess = true;
 
 window.addEventListener("keydown", (e) => {
   if (e.code === "Space") {
@@ -189,6 +191,9 @@ window.addEventListener("keydown", (e) => {
   }
   if (e.code === "KeyR") {
     randomize();
+  }
+  if (e.code === "KeyT") {
+    postProcess = !postProcess;
   }
 });
 
@@ -198,6 +203,10 @@ document.querySelector("#pauseBtn").addEventListener("click", (e) => {
 
 document.querySelector("#randomizeBtn").addEventListener("click", (e) => {
   randomize();
+});
+
+document.querySelector("#toggleBtn").addEventListener("click", (e) => {
+  postProcess = !postProcess;
 });
 
 let time = 0;
@@ -218,8 +227,12 @@ function render() {
     invalidate = false;
   }
   vhs.paused = !running;
-  vhs.render(scene, camera);
-  post.render(vhs.texture);
+  if (postProcess) {
+    vhs.render(scene, camera);
+    post.render(vhs.texture);
+  } else {
+    renderer.render(scene, camera);
+  }
   renderer.setAnimationLoop(render);
 }
 
