@@ -7,30 +7,22 @@ import {
   camera,
 } from "../modules/renderer.js";
 import {
-  BackSide,
   FogExp2,
-  PCFSoftShadowMap,
   DynamicDrawUsage,
-  IcosahedronBufferGeometry,
   InstancedMesh,
   DirectionalLight,
   AmbientLight,
   HemisphereLight,
   Matrix4,
-  Mesh,
-  MeshBasicMaterial,
-  MeshNormalMaterial,
   MeshStandardMaterial,
   Object3D,
   Quaternion,
-  TextureLoader,
-  TorusKnotBufferGeometry,
   Vector3,
   PCFShadowMap,
 } from "../third_party/three.module.js";
-import { VHS } from "./vhs.js";
+import { VHS } from "./VHS.js";
 import { RoundedBoxGeometry } from "../third_party/RoundedBoxGeometry.js";
-import { TAU, parabola, mod, VERSION } from "../modules/Maf.js";
+import { TAU, parabola, mod } from "../modules/Maf.js";
 import { getLemniscatePoint } from "../modules/lemniscate.js";
 import { GradientLinear } from "../modules/gradient-linear.js";
 import { Post } from "./post.js";
