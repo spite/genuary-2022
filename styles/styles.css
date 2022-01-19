@@ -53,18 +53,36 @@ canvas {
 
 #info {
   position: absolute;
-  left: 0;
-  top: 0;
-  right: 0;
+  left: 0.5em;
+  top: 0.5em;
   pointer-events: none;
   z-index: 10;
-  padding: 2em;
+  padding: 1.5em;
   color: white;
   text-shadow: 1px 1px black;
+  border-radius: 1em;
 }
 
 #info a {
   color: inherit;
+}
+
+#info p:last-child {
+  margin-bottom: 0;
+}
+
+.contrast * {
+  text-shadow: none;
+  color: black;
+}
+
+.contrast #info button {
+  border-color: black;
+}
+
+.contrast #info button:hover {
+  background-color: rgb(80, 80, 80);
+  color: white;
 }
 
 #info h1 {
@@ -96,10 +114,14 @@ button {
   margin-right: 0.5em;
   pointer-events: auto;
   text-shadow: 1px 1px black;
+  font-weight: bold;
 }
 
-button:hover {
-  background-color: gray;
+button:hover,
+#info button:hover {
+  background-color: rgb(180, 180, 180);
+  color: black;
+  text-shadow: none;
 }
 
 #info a {
