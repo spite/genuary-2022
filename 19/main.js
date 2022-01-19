@@ -145,9 +145,16 @@ function kanjiToDofLines(lines) {
   geometry.setAttribute("seed", new BufferAttribute(seeds, 1));
   geometry.setAttribute("color", new BufferAttribute(colors, 3));
   dofRenderer.addLines(geometry);
+  loading = false;
 }
 
+let loading = false;
+
 async function load() {
+  if (loading) {
+    return;
+  }
+  loading = true;
   // const kanjis = await loadKanjis();
   const lines = await loadKanjiFromGitHub(
     kanjis[Math.floor(Math.random() * kanjis.length)]
