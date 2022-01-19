@@ -97,7 +97,7 @@ void main() {
 
   mvPosition.xy += dir.xy * r;
   gl_Position = projectionMatrix * mvPosition;
-  gl_PointSize = 1.;// + r;
+  gl_PointSize = 1. + r;
  
 }
 `;
