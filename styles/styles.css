@@ -71,7 +71,8 @@ canvas {
   margin-bottom: 0;
 }
 
-.contrast * {
+.contrast #info *,
+.contrast footer * {
   text-shadow: none;
   color: black;
 }
