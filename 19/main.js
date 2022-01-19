@@ -10,6 +10,7 @@ import {
   BufferGeometry,
   BufferAttribute,
   Vector3,
+  Vector4,
 } from "../third_party/three.module.js";
 import { data } from "./entries.js";
 import { curl, generateNoiseFunction } from "../modules/curl.js";
@@ -74,16 +75,19 @@ for (const controller of gui.__controllers) {
 const dofRenderer = new DOFRenderer(renderer);
 
 const ITERATIONS = 10;
-const fn = generateNoiseFunction();
+let fn = generateNoiseFunction();
 
+let twist = false;
 const tmp = new Vector3();
+const s = new Vector3(0.5, 0.5, 1.5);
+
 function iteratePoint(p) {
   for (let i = 0; i < ITERATIONS; i++) {
     tmp.copy(p).multiplyScalar(0.01);
     const dir = curl(tmp, fn);
-    dir.normalize().multiplyScalar(0.5);
-    // p.add(dir);
-    p.z += dir.z;
+    dir.normalize().multiply(s);
+    p.add(dir);
+    // p.z += dir.z;
   }
 }
 
@@ -168,7 +172,9 @@ async function load() {
     let ptr = 0;
     const sizes = [];
     for (const p of line.points) {
-      // iteratePoint(p);
+      if (twist) {
+        iteratePoint(p);
+      }
       p.multiplyScalar(0.1);
       min.x = Math.min(min.x, p.x);
       min.y = Math.min(min.y, p.y);
@@ -197,6 +203,9 @@ async function load() {
 load();
 
 function randomize() {
+  if (twist) {
+    fn = generateNoiseFunction();
+  }
   dofRenderer.clear();
   load();
 }
@@ -217,6 +226,10 @@ window.addEventListener("keydown", (e) => {
   if (e.code === "Space") {
     focus();
   }
+  if (e.code === "KeyT") {
+    twist = !twist;
+    randomize();
+  }
 });
 
 document.querySelector("#randomizeBtn").addEventListener("click", (e) => {
@@ -225,6 +238,11 @@ document.querySelector("#randomizeBtn").addEventListener("click", (e) => {
 
 document.querySelector("#focusBtn").addEventListener("click", (e) => {
   focus();
+});
+
+document.querySelector("#twistBtn").addEventListener("click", (e) => {
+  twist = !twist;
+  randomize();
 });
 
 camera.position.set(0.5, -0.5, 1).normalize().multiplyScalar(17);
