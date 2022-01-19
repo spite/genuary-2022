@@ -7,24 +7,13 @@ import {
   getControls,
 } from "../modules/renderer.js";
 import {
-  BoxBufferGeometry,
   BufferGeometry,
-  LineBasicMaterial,
-  LineSegments,
-  Mesh,
-  MeshNormalMaterial,
-  PlaneBufferGeometry,
   BufferAttribute,
-  Points,
-  PointsMaterial,
   Vector3,
 } from "../third_party/three.module.js";
 import { data } from "./entries.js";
-import { Letter } from "./Letter.js";
-import { Poisson2D } from "../modules/poisson.js";
 import { curl, generateNoiseFunction } from "../modules/curl.js";
-import { MeshSurfaceSampler } from "../third_party/MeshSurfaceSampler.js";
-import { loadKanjiFromGitHub, loadKanjis } from "./kanji.js";
+import { loadKanjiFromGitHub } from "./kanji.js";
 import { DOFRenderer } from "../modules/dof-renderer.js";
 import * as dat from "../third_party/dat.gui.module.js";
 import { mix } from "../modules/Maf.js";
