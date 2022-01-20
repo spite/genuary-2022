@@ -224,7 +224,20 @@ function randomize() {
   noiseShader.uniforms.speed.value = randomInRange(10, 30);
   noiseShader.uniforms.phase.value = randomInRange(4, 8);
   noiseShader.uniforms.weight.value = randomInRange(0.5, 2);
-  ssao.shader.uniforms.blockiness.value = Math.round(randomInRange(50, 1000));
+  const f = Math.floor(Math.random() * 4);
+  if (f === 0) {
+    ssao.shader.uniforms.blockiness.value = Math.round(randomInRange(30, 50));
+  } else if (f === 1) {
+    ssao.shader.uniforms.blockiness.value = Math.round(randomInRange(50, 100));
+  } else if (f == 2) {
+    ssao.shader.uniforms.blockiness.value = Math.round(
+      randomInRange(100, 2000)
+    );
+  } else {
+    ssao.shader.uniforms.blockiness.value = Math.round(
+      randomInRange(200, 10000)
+    );
+  }
 }
 
 document.querySelector("#randomizeBtn").addEventListener("click", (e) => {
