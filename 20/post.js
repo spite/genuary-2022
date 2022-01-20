@@ -1,32 +1,18 @@
 import {
   RawShaderMaterial,
-  HalfFloatType,
-  NearestFilter,
   RGBAFormat,
   UnsignedByteType,
   LinearFilter,
   ClampToEdgeWrapping,
-  BackSide,
-  FrontSide,
   Vector2,
   GLSL3,
-  Vector3,
-  DataTexture3D,
-  RedFormat,
-  FloatType,
 } from "../third_party/three.module.js";
-import { getFBO } from "../modules/fbo.js";
 import { shader as orthoVertexShader } from "../shaders/ortho.js";
 import { ShaderPass } from "../modules/ShaderPass.js";
 import { shader as vignette } from "../shaders/vignette.js";
 import { shader as noise } from "../shaders/noise.js";
 import { shader as screen } from "../shaders/screen.js";
-// import { shader as fxaa } from "../shaders/fxaa.js";
-// import { shader as softLight } from "../shaders/soft-light.js";
-// import { shader as colorDodge } from "../shaders/color-dodge.js";
-// import { shader as rgbShift } from "../shaders/rgb-shift.js";
 import { BloomPass } from "../modules/bloomPass.js";
-import { shader as chromaticAberration } from "../shaders/chromatic-aberration.js";
 import { shader as fxaa } from "../shaders/fxaa.js";
 
 const finalFragmentShader = `
@@ -85,11 +71,13 @@ in vec2 vUv;
 
 out vec4 fragColor;
 
-${chromaticAberration}
+${fxaa}
 
 void main() {
   vec2 uv = .8 * (vUv - .5) + .5;
-  fragColor = chromaticAberration(inputTexture, uv, .1, (vUv-.5) );
+  fragColor = fxaa(inputTexture, vUv);
+
+  // fragColor = chromaticAberration(inputTexture, uv, .1, (vUv-.5) );
 }`;
 
 class Post {
