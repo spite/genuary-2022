@@ -14,10 +14,12 @@
         right: 0;
         overflow: auto;
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(512px, 1fr));
+        grid-template-columns: repeat(
+          auto-fill,
+          minmax(min(100vw, 512px), 1fr)
+        );
       }
       .content img {
-        /* max-width: 512px; */
         width: 100%;
       }
     </style>
