@@ -224,6 +224,7 @@ function randomize() {
   noiseShader.uniforms.speed.value = randomInRange(10, 30);
   noiseShader.uniforms.phase.value = randomInRange(4, 8);
   noiseShader.uniforms.weight.value = randomInRange(0.5, 2);
+  ssao.shader.uniforms.blockiness.value = Math.round(randomInRange(50, 1000));
 }
 
 document.querySelector("#randomizeBtn").addEventListener("click", (e) => {
