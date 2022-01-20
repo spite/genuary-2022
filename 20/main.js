@@ -96,15 +96,15 @@ float getWaves(vec2 position, int iterations){
   float cSpeed = speed;
   float cPhase = phase;
   for(int i=0;i<iterations;i++){
-      vec2 p = vec2(sin(iter), cos(iter));
-      vec2 res = wavedx(position, p, cSpeed, cPhase, time);
-      position += normalize(p) * res.y * cWeight * DRAG_MULT;
-      w += res.x * cWeight;
-      iter += 12.0;
-      ws += cWeight;
-      cWeight = mix(cWeight, 0.0, 0.2);
-      cPhase *= 1.18;
-      cSpeed *= 1.07;
+    vec2 p = vec2(sin(iter), cos(iter));
+    vec2 res = wavedx(position, p, cSpeed, cPhase, time);
+    position += p * res.y * cWeight * DRAG_MULT;
+    w += res.x * cWeight;
+    iter += 12.0;
+    ws += cWeight;
+    cWeight = mix(cWeight, 0.0, 0.2);
+    cPhase *= 1.18;
+    cSpeed *= 1.07;
   }
   return w / ws;
 }
