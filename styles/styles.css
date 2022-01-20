@@ -12,7 +12,7 @@ html {
 }
 
 body {
-  padding: 2em;
+  /* padding: 2em; */
 }
 
 #index {
@@ -25,7 +25,7 @@ body {
 }
 
 #index h1 {
-  margin-bottom: 1em;
+  padding: 1em;
 }
 
 #index ul {
@@ -137,4 +137,9 @@ footer {
   z-index: 10;
   color: white;
   text-shadow: 1px 1px black;
+}
+
+.contact {
+  padding: 1em;
+  font-size: 2em;
 }

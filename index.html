@@ -5,36 +5,174 @@
     <title>Genuary 2022</title>
     <meta name="viewport" content="initial-scale=1, maximum-scale=1" />
     <link href="./styles/styles.css" rel="stylesheet" />
-    <style></style>
+    <style>
+      div.cards {
+        display: flex;
+        flex-flow: row wrap;
+      }
+      div.cards div {
+        display: flex;
+        width: 25vw;
+        height: 25vw;
+        background-size: contain;
+        position: relative;
+        filter: grayscale(0.2);
+        transition: filter ease-in-out 200ms;
+      }
+      div.cards div:hover {
+        filter: grayscale(0);
+      }
+      div.cards div a {
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        font-size: 0.5vw;
+        right: 0;
+        top: 0;
+        display: flex;
+        align-items: end;
+        justify-content: center;
+        padding: 2em;
+      }
+      div.day1 {
+        background-image: url("screenshots/genuary-1.jpg");
+      }
+      div.day2 {
+        background-image: url("screenshots/genuary-2.jpg");
+        color: white;
+      }
+      div.day3 {
+        background-image: url("screenshots/genuary-3.jpg");
+        color: white;
+      }
+      div.day4 {
+        background-image: url("screenshots/genuary-4.jpg");
+      }
+      div.day5 {
+        background-image: url("screenshots/genuary-5.jpg");
+      }
+      div.day6 {
+        background-image: url("screenshots/genuary-6.jpg");
+        color: white;
+      }
+      div.day7 {
+        background-image: url("screenshots/genuary-7.jpg");
+        color: white;
+      }
+      div.day8 {
+        background-image: url("screenshots/genuary-8.jpg");
+        color: white;
+      }
+      div.day9 {
+        background-image: url("screenshots/genuary-9.jpg");
+        color: white;
+      }
+      div.day10 {
+        background-image: url("screenshots/genuary-10.jpg");
+        color: white;
+      }
+      div.day11 {
+        background-image: url("screenshots/genuary-11.jpg");
+      }
+      div.day12 {
+        background-image: url("screenshots/genuary-12.jpg");
+        color: white;
+      }
+      div.day13 {
+        background-image: url("screenshots/genuary-13.jpg");
+      }
+      div.day14 {
+        background-image: url("screenshots/genuary-14.jpg");
+      }
+      div.day15 {
+        background-image: url("screenshots/genuary-15.jpg");
+        color: white;
+      }
+      div.day16 {
+        background-image: url("screenshots/genuary-16.jpg");
+        color: white;
+      }
+      div.day17 {
+        background-image: url("screenshots/genuary-17.jpg");
+        color: white;
+      }
+      div.day18 {
+        background-image: url("screenshots/genuary-18.jpg");
+      }
+      div.day19 {
+        background-image: url("screenshots/genuary-19.jpg");
+      }
+      div.day20 {
+        background-image: url("screenshots/genuary-20.jpg");
+      }
+    </style>
   </head>
   <body>
     <div id="index">
       <h1>Genuary 2022</h1>
-      <ul>
-        <li class="day1">
+      <div class="cards">
+        <div class="day1">
           <a href="./1"><h2>1. draw 10,000 of something</h2></a>
+        </div>
+        <div class="day2">
           <a href="./2"><h2>2. dithering</h2></a>
+        </div>
+        <div class="day3">
           <a href="./3"><h2>3. space</h2></a>
+        </div>
+        <div class="day4">
           <a href="./4"><h2>4. the next next Fidenza</h2></a>
+        </div>
+        <div class="day5">
           <a href="./5"><h2>5. destroy a square</h2></a>
+        </div>
+        <div class="day6">
           <a href="./6"><h2>6. trade styles with a friend</h2></a>
+        </div>
+        <div class="day7">
           <a href="./7"><h2>7. Sol LeWitt wall drawing</h2></a>
+        </div>
+        <div class="day8">
           <a href="./8"><h2>8. single curve only</h2></a>
+        </div>
+        <div class="day9">
           <a href="./9"><h2>9. architecture</h2></a>
+        </div>
+        <div class="day10">
           <a href="./10"><h2>10. machine learning, wrong answers only</h2></a>
+        </div>
+        <div class="day11">
           <a><h2>11. no computer</h2></a>
+        </div>
+        <div class="day12">
           <a href="./12"><h2>12. packing (squares, circles, any shape…)</h2></a>
+        </div>
+        <div class="day13">
           <a><h2>13. 800x80</h2></a>
+        </div>
+        <div class="day14">
           <a><h2>14. something you'd never make</h2></a>
+        </div>
+        <div class="day15">
           <a href="./15"><h2>15. sand</h2></a>
+        </div>
+        <div class="day16">
           <a href="./16"><h2>16. color gradients gone wrong</h2></a>
+        </div>
+        <div class="day17">
           <a href="./17"><h2>17. 3 colors</h2></a>
+        </div>
+        <div class="day18">
           <a href="./18"><h2>18. VHS</h2></a>
+        </div>
+        <div class="day19">
           <a href="./19"><h2>19. use text/typography</h2></a>
-        </li>
-      </ul>
+        </div>
+      </div>
     </div>
-    <p><a href="https://github.com/spite/genuary-2022">GitHub repo</a></p>
-    <p>Follow me on <a href="https://twitter.com/thespite">twitter</a></p>
+    <div class="contact">
+      <p><a href="https://github.com/spite/genuary-2022">GitHub repo</a></p>
+      <p>Follow me on <a href="https://twitter.com/thespite">twitter</a></p>
+    </div>
   </body>
 </html>
