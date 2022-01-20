@@ -7,13 +7,15 @@
     <link href="./styles/styles.css" rel="stylesheet" />
     <style>
       div.cards {
-        display: flex;
-        flex-flow: row wrap;
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(512px, 1fr));
+      }
+      div.cards div::before {
+        content: "";
+        display: block;
+        padding-bottom: 100%;
       }
       div.cards div {
-        display: flex;
-        width: calc((100vw - 17px) / 4);
-        height: calc((100vw - 17px) / 4);
         background-size: contain;
         position: relative;
         filter: grayscale(0.2);
@@ -26,7 +28,7 @@
         position: absolute;
         left: 0;
         bottom: 0;
-        font-size: 0.5vw;
+        font-size: 1em;
         right: 0;
         top: 0;
         display: flex;
