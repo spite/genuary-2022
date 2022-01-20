@@ -29,23 +29,23 @@ uniform mat3 normalMatrix;
 uniform sampler2D heightMap;
 uniform float time;
 uniform float factor;
+uniform float blockiness;
 
 out vec3 vPosition;
 out vec3 vColor;
 out vec3 lDir;
 
 void main() {
-  lDir= normalize(vec3(1.));
+  lDir = normalize(vec3(1.));
   vec4 p = instanceMatrix * vec4(0., 0., 0., 1.);
   vec2 size = vec2(textureSize(heightMap, 0));
-  float detail = factor;//floor(128. * (.5 + .5 * sin(time/100.)));
-  vec2 vuv = floor( p.xz * detail) / detail;
+  vec2 vuv = p.xz;
   float h = texture(heightMap, vuv + .5 / size).r;
-  vColor= vec3(h);
-  h = round(h*50.)/50.;
+  vColor= round(vec3(h) * blockiness)/blockiness;
+  h = round(h*blockiness)/blockiness;
   h /= 5.;
   vec3 pp = position;
-  pp.y += h;//vec3(p.x, h, p.y);
+  pp.y += h;
   if(position.y < 0.) {
     pp.y = -.05;
   }
@@ -80,16 +80,13 @@ void main() {
   vec3 n = normalize(cross(X,Y));
 
   float diffuse = .5 + .5 * max(0., dot(n, lDir));
-  float level = round(vColor.x*50.)/50.;
-  vec3 c = texture(gradient, vec2(level, 0.)).rgb;//mix(vec3(13.,7., 97.)/ 255., vec3(97., 167., 239.)/ 255., .2 + vColor.x * .6);
+  float level = vColor.x;
+  vec3 c = texture(gradient, vec2(level, 0.)).rgb;
   c *= length(n);
 
   vec3 e = normalize(-vPosition.xyz);
   vec3 h = normalize(lDir + e);
   float specular = pow(max(dot(n, h), 0.), 20.);
-
-  // vec3 modColor = c * diffuse;
-  // modColor += specular;
 
   vec3 modColor = rgb2hsv(c);
   modColor.x += .01 * diffuse;
@@ -98,6 +95,7 @@ void main() {
   modColor.z += specular;
   modColor = hsv2rgb(modColor);
 
+  // modColor = vec3(diffuse + specular);
   // modColor = mix(modColor, vec3(1.,1.,1.), specular);
 
   color = vec4(modColor , 1.);//vec4(diffuse);//vec4(vec3(.75 + diffuse), 1.);
@@ -228,6 +226,7 @@ class SSAO {
         gradient: { value: null },
         factor: { value: 0 },
         time: { value: 0 },
+        blockiness: { value: 100 },
       },
       vertexShader,
       fragmentShader,
