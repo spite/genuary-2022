@@ -176,7 +176,7 @@ function renderLines(borderColor) {
   const minLw = randomInRange(0.02, 0.04);
   const maxLw = randomInRange(0.04, 0.08);
   const fn = generateNoiseFunction();
-  const scale = randomInRange(0.001, 0.005);
+  const scale = randomInRange(0.001, 0.002);
   const colorScale = randomInRange(0.0001, 0.0005);
   let id = 1;
   const LENGTH = 400;
