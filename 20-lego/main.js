@@ -26,7 +26,7 @@ import { ShaderTexture } from "../modules/ShaderTexture.js";
 import { SSAO } from "./SSAO.js";
 import { Post } from "./post.js";
 import { randomInRange } from "../modules/Maf.js";
-import { capture } from "../modules/capture.js";
+// import { capture } from "../modules/capture.js";
 import { mergeGeometries } from "../modules/Geometry.js";
 
 const WIDTH = 50;
@@ -238,7 +238,7 @@ let running = true;
 function randomize() {
   noiseShader.uniforms.speed.value = randomInRange(10, 30);
   noiseShader.uniforms.phase.value = randomInRange(4, 8);
-  noiseShader.uniforms.weight.value = randomInRange(0.5, 2)
+  noiseShader.uniforms.weight.value = randomInRange(0.5, 2);
 }
 
 document.querySelector("#randomizeBtn").addEventListener("click", (e) => {
@@ -290,15 +290,15 @@ function render() {
   ssao.render(renderer, scene, camera);
   post.render(ssao.output);
 
-  capture(renderer.domElement);
+  // capture(renderer.domElement);
 
-  if (frames % 120 === 0) {
-    // randomize();
-  }
-  if (frames > 2 * 60 && window.capturer.capturing) {
-    window.capturer.stop();
-    window.capturer.save();
-  }
+  // if (frames % 120 === 0) {
+  //   // randomize();
+  // }
+  // if (frames > 2 * 60 && window.capturer.capturing) {
+  //   window.capturer.stop();
+  //   window.capturer.save();
+  // }
 
   frames++;
 
@@ -310,7 +310,7 @@ addResize(myResize);
 resize();
 render();
 
-window.start = () => {
-  frames = 0;
-  window.capturer.start();
-};
+// window.start = () => {
+//   frames = 0;
+//   window.capturer.start();
+// };
