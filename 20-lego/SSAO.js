@@ -96,9 +96,9 @@ void main() {
   modColor = hsv2rgb(modColor);
 
   // modColor = vec3(diffuse + specular);
-  // modColor = mix(modColor, vec3(1.,1.,1.), specular);
   modColor *= diffuse;
-  modColor += specular;
+  modColor = mix(modColor, vec3(1.,1.,1.), specular);
+  // modColor = specular;
 
   color = vec4(modColor , 1.);//vec4(diffuse);//vec4(vec3(.75 + diffuse), 1.);
   float d = linearizeDepth(length( vPosition ));
