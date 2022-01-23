@@ -62,7 +62,6 @@ function getVolume() {
   } else {
     src = getRandomVolume();
   }
-  // const src = getRandomVolume();
 
   const points = [];
   for (const pt of src) {
@@ -89,25 +88,11 @@ let particles;
 let leaves;
 
 function addSeeds() {
-  // venation.addSeed(new Vector3(0, -1, 0));
   const seeds = Math.floor(randomInRange(1, 4));
   for (let j = 0; j < seeds; j++) {
-    // venation.addSeed(
-    //   new Vector3(
-    //     randomInRange(-0.5 * WIDTH, 0.5 * WIDTH),
-    //     randomInRange(-0.5 * HEIGHT, 0.5 * HEIGHT),
-    //     randomInRange(-0.5 * DEPTH, 0.5 * DEPTH)
-    //   )
-    // );
     venation.addSeed(points[~~(Math.random() * points.length)].clone());
   }
 }
-
-// venation.addSeed(new Vector2(512, 512));
-
-// canvas.addEventListener("click", (e) => {
-//   venation.addSeed(new Vector3(e.pageX, e.pageY, 0));
-// });
 
 const gl = renderer.getContext();
 gl.enable(gl.SAMPLE_ALPHA_TO_COVERAGE);
@@ -259,9 +244,28 @@ function randomize() {
 
   venation = new Venation(points);
 
-  venation.closestDistance = randomInRange(0.2, 2);
-  venation.minDistance = randomInRange(0.005, 0.05);
+  const r1 = Math.random();
+  if (r1 < 1 / 3) {
+    venation.closestDistance = randomInRange(0.1, 0.2);
+  } else if (r1 < 2 / 3) {
+    venation.closestDistance = randomInRange(0.2, 1);
+  } else {
+    venation.closestDistance = randomInRange(1, 2);
+  }
+
+  const r2 = Math.random();
+  if (r2 < 1 / 3) {
+    venation.minDistance = randomInRange(0.001, 0.01);
+  } else if (r2 < 2 / 3) {
+    venation.minDistance = randomInRange(0.01, 0.05);
+  } else {
+    venation.minDistance = randomInRange(0.05, 0.1);
+  }
+
+  venation.closestDistance = 0.2;
+  venation.minDistance = 0.005;
   venation.starvedProbability = randomInRange(0, 0.5);
+
   addSeeds();
 }
 
