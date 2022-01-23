@@ -21,6 +21,8 @@
         position: relative;
         filter: grayscale(0.2);
         transition: filter ease-in-out 200ms;
+        color: black;
+        text-shadow: 1px 1px white;
       }
       div.cards div:hover {
         filter: grayscale(0);
@@ -38,16 +40,18 @@
         padding: 2em;
         text-align: center;
       }
+      div.cards div.contrast {
+        color: white;
+        text-shadow: 1px 1px black;
+      }
       div.day1 {
         background-image: url("screenshots/genuary-1.jpg");
       }
       div.day2 {
         background-image: url("screenshots/genuary-2.jpg");
-        color: white;
       }
       div.day3 {
         background-image: url("screenshots/genuary-3.jpg");
-        color: white;
       }
       div.day4 {
         background-image: url("screenshots/genuary-4.jpg");
@@ -57,32 +61,25 @@
       }
       div.day6 {
         background-image: url("screenshots/genuary-6.jpg");
-        color: white;
       }
       div.day7 {
         background-image: url("screenshots/genuary-7.jpg");
-        color: white;
       }
       div.day8 {
         background-image: url("screenshots/genuary-8.jpg");
-        color: white;
       }
       div.day9 {
         background-image: url("screenshots/genuary-9.jpg");
-        color: white;
       }
       div.day10 {
         background-image: url("screenshots/genuary-10.jpg");
-        color: white;
       }
       div.day11 {
         background-image: url("screenshots/genuary-11.jpg");
-        color: white;
         text-shadow: 1px 1px black;
       }
       div.day12 {
         background-image: url("screenshots/genuary-12.jpg");
-        color: white;
       }
       div.day13 {
         background-image: url("screenshots/genuary-13.jpg");
@@ -92,15 +89,12 @@
       }
       div.day15 {
         background-image: url("screenshots/genuary-15.jpg");
-        color: white;
       }
       div.day16 {
         background-image: url("screenshots/genuary-16.jpg");
-        color: white;
       }
       div.day17 {
         background-image: url("screenshots/genuary-17.jpg");
-        color: white;
       }
       div.day18 {
         background-image: url("screenshots/genuary-18.jpg");
@@ -116,7 +110,6 @@
       }
       div.day21 {
         background-image: url("screenshots/genuary-21.jpg");
-        color: white;
       }
       div.day22 {
         background-image: url("screenshots/genuary-22.jpg");
@@ -133,10 +126,10 @@
         <div class="day1">
           <a href="./1"><h2>1. draw 10,000 of something</h2></a>
         </div>
-        <div class="day2">
+        <div class="day2 contrast">
           <a href="./2"><h2>2. dithering</h2></a>
         </div>
-        <div class="day3">
+        <div class="day3 contrast">
           <a href="./3"><h2>3. space</h2></a>
         </div>
         <div class="day4">
@@ -145,25 +138,25 @@
         <div class="day5">
           <a href="./5"><h2>5. destroy a square</h2></a>
         </div>
-        <div class="day6">
+        <div class="day6 contrast">
           <a href="./6"><h2>6. trade styles with a friend</h2></a>
         </div>
-        <div class="day7">
+        <div class="day7 contrast">
           <a href="./7"><h2>7. Sol LeWitt wall drawing</h2></a>
         </div>
-        <div class="day8">
+        <div class="day8 contrast">
           <a href="./8"><h2>8. single curve only</h2></a>
         </div>
-        <div class="day9">
+        <div class="day9 contrast">
           <a href="./9"><h2>9. architecture</h2></a>
         </div>
-        <div class="day10">
+        <div class="day10 contrast">
           <a href="./10"><h2>10. machine learning, wrong answers only</h2></a>
         </div>
-        <div class="day11">
+        <div class="day11 contrast">
           <a href="./11"><h2>11. no computer</h2></a>
         </div>
-        <div class="day12">
+        <div class="day12 contrast">
           <a href="./12"><h2>12. packing (squares, circles, any shape…)</h2></a>
         </div>
         <div class="day13">
@@ -172,13 +165,13 @@
         <div class="day14">
           <a><h2>14. something you'd never make</h2></a>
         </div>
-        <div class="day15">
+        <div class="day15 contrast">
           <a href="./15"><h2>15. sand</h2></a>
         </div>
-        <div class="day16">
+        <div class="day16 contrast">
           <a href="./16"><h2>16. color gradients gone wrong</h2></a>
         </div>
-        <div class="day17">
+        <div class="day17 contrast">
           <a href="./17"><h2>17. 3 colors</h2></a>
         </div>
         <div class="day18">
@@ -190,7 +183,7 @@
         <div class="day20">
           <a href="./20"><h2>20. make a sea of shapes</h2></a>
         </div>
-        <div class="day21">
+        <div class="day21 contrast">
           <a href="./21"
             ><h2>
               21. combine two (or more) of your pieces<br />from previous days
