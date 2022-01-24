@@ -52,8 +52,19 @@ const rnd2 = (() => {
   };
 })();
 
+function chooseRandomGenerator() {
+  if (Math.random() > 0.5) {
+    console.log("using rnd1");
+    return rnd1;
+  } else {
+    console.log("using rnd2");
+    return rnd2;
+  }
+}
+
+const rnd = chooseRandomGenerator();
 function randomInRange(a, b) {
-  return a + rnd2() * (b - a);
+  return a + rnd() * (b - a);
 }
 
 // const buckets = [];
