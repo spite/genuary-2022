@@ -20,12 +20,13 @@ import {
   HemisphereLight,
   MeshStandardMaterial,
   DynamicDrawUsage,
+  Vector2,
 } from "../third_party/three.module.js";
-
 import { TAU } from "../modules/Maf.js";
 import { GLTFLoader } from "../third_party/GLTFLoader.js";
 import { SSAO } from "./SSAO.js";
 import { Post } from "./post.js";
+// import { capture } from "../modules/capture.js";
 
 const ssao = new SSAO();
 const post = new Post(renderer);
@@ -177,6 +178,17 @@ function generate(geo) {
   group.add(mesh2);
 }
 
+const mouse = new Vector2(0, 0);
+const size = new Vector2();
+function onMouseMove(event) {
+  renderer.getSize(size);
+  mouse.x = (event.clientX / size.x) * 2 - 1;
+  mouse.y = (event.clientY / size.y) * 2 - 1;
+}
+
+window.addEventListener("pointermove", onMouseMove, false);
+window.addEventListener("pointerdown", onMouseMove, false);
+
 function update() {
   const dummy = new Object3D();
   const dir = new Vector3();
@@ -185,19 +197,38 @@ function update() {
   const y = new Vector3(0, 1, 0);
 
   const prob = 0.99;
+  const prob2 = 0.6;
+  const tmp = new Vector3();
+  const tmp2 = new Vector2();
 
   for (let i = 0; i < particles.length; i++) {
     const p = particles[i];
 
-    if (randomInRange(0, 1) > prob) {
-      p.toRotx++;
-    }
-    if (randomInRange(0, 1) > prob) {
-      p.toRoty++;
+    tmp.copy(p.position).multiplyScalar(0.01);
+    tmp.applyMatrix4(group.matrix);
+    const pos = tmp.project(camera);
+    tmp2.set(pos.x, -pos.y);
+    const d = tmp2.distanceTo(mouse);
+
+    if (d < 0.5) {
+      const inc = (0.5 - d) / 2;
+      if (randomInRange(0, 1) > prob2) {
+        p.toRotx += inc;
+      }
+      if (randomInRange(0, 1) > prob2) {
+        p.toRoty += inc;
+      }
+    } else {
+      if (randomInRange(0, 1) > prob) {
+        p.toRotx++;
+      }
+      if (randomInRange(0, 1) > prob) {
+        p.toRoty++;
+      }
     }
 
-    p.rotx += (p.toRotx - p.rotx) * 0.1;
-    p.roty += (p.toRoty - p.roty) * 0.1;
+    p.rotx += (Math.round(p.toRotx) - p.rotx) * 0.1;
+    p.roty += (Math.round(p.toRoty) - p.roty) * 0.1;
 
     const s = p.size;
     dir.copy(p).normalize();
@@ -226,6 +257,8 @@ function update() {
   mesh2.instanceMatrix.needsUpdate = true;
 }
 
+let frames = 0;
+
 function render() {
   if (running) {
     group.rotation.y += 0.001;
@@ -234,6 +267,15 @@ function render() {
   }
   ssao.render(renderer, scene, camera);
   post.render(ssao.output);
+
+  // capture(renderer.domElement);
+
+  // if (frames > 5 * 60 && window.capturer.capturing) {
+  //   window.capturer.stop();
+  //   window.capturer.save();
+  // }
+  // frames++;
+
   renderer.setAnimationLoop(render);
 }
 
@@ -328,3 +370,8 @@ addResize(myResize);
 
 resize();
 init();
+
+// window.start = () => {
+//   frames = 0;
+//   window.capturer.start();
+// };
