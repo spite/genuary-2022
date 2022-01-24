@@ -2,13 +2,11 @@ import {
   scene,
   getControls,
   renderer,
-  addUpdate,
   camera,
   addResize,
   resize,
 } from "../modules/renderer.js";
 import { PoissonSphere3D } from "../modules/poisson.js";
-import { RoundedBoxGeometry } from "../third_party/RoundedBoxGeometry.js";
 import {
   BoxBufferGeometry,
   InstancedMesh,
@@ -18,13 +16,10 @@ import {
   Vector3,
   PCFSoftShadowMap,
   DirectionalLight,
-  AmbientLight,
   sRGBEncoding,
   HemisphereLight,
   MeshStandardMaterial,
-  IcosahedronBufferGeometry,
   DynamicDrawUsage,
-  Mesh,
 } from "../third_party/three.module.js";
 
 import { TAU } from "../modules/Maf.js";
@@ -60,44 +55,44 @@ function randomInRange(a, b) {
   return a + rnd2() * (b - a);
 }
 
-const buckets = [];
-const numBuckets = 100;
+// const buckets = [];
+// const numBuckets = 100;
 
-for (let i = 0; i < numBuckets; i++) {
-  buckets[i] = { accum: 0, count: 0, res: 0 };
-}
+// for (let i = 0; i < numBuckets; i++) {
+//   buckets[i] = { accum: 0, count: 0, res: 0 };
+// }
 
-let mean = 0;
-let total = 0;
-const values = [];
+// let mean = 0;
+// let total = 0;
+// const values = [];
 
-function process(v) {
-  values.push(v);
-  mean += v;
-  total++;
-  const b = Math.floor(v * 100);
-  const bucket = buckets[b];
-  bucket.accum += v;
-  bucket.count++;
-}
+// function process(v) {
+//   values.push(v);
+//   mean += v;
+//   total++;
+//   const b = Math.floor(v * 100);
+//   const bucket = buckets[b];
+//   bucket.accum += v;
+//   bucket.count++;
+// }
 
-for (let i = 0; i < 10000; i++) {
-  process(rnd1());
-}
+// for (let i = 0; i < 10000; i++) {
+//   process(rnd1());
+// }
 
-mean = mean / total;
+// mean = mean / total;
 
-let variance = 0;
-for (let i = 0; i < values.length; i++) {
-  variance += (mean - values[i]) ** 2;
-}
-variance /= total;
+// let variance = 0;
+// for (let i = 0; i < values.length; i++) {
+//   variance += (mean - values[i]) ** 2;
+// }
+// variance /= total;
 
-for (let i = 0; i < numBuckets; i++) {
-  buckets[i].res = buckets[i].accum / buckets[i].count;
-}
+// for (let i = 0; i < numBuckets; i++) {
+//   buckets[i].res = buckets[i].accum / buckets[i].count;
+// }
 
-console.log(mean, variance, buckets);
+// console.log(mean, variance, buckets);
 
 const poisson = new PoissonSphere3D(50, 50, 50, 2.5);
 const points = poisson.calculate();
