@@ -8,7 +8,10 @@
     <style>
       div.cards {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(512px, 1fr));
+        grid-template-columns: repeat(
+          auto-fill,
+          minmax(min(512px, 100vw), 1fr)
+        );
       }
       div.cards div::before {
         content: "";
@@ -43,6 +46,7 @@
         padding: 2em;
         text-align: center;
       }
+      div.cards div:active a,
       div.cards div:hover a {
         opacity: 1;
       }
