@@ -28,6 +28,7 @@
         filter: grayscale(0);
       }
       div.cards div a {
+        text-decoration: none;
         position: absolute;
         left: 0;
         bottom: 0;
@@ -35,10 +36,15 @@
         right: 0;
         top: 0;
         display: flex;
+        opacity: 0;
+        transition: opacity ease-in-out 200ms;
         align-items: end;
         justify-content: center;
         padding: 2em;
         text-align: center;
+      }
+      div.cards div:hover a {
+        opacity: 1;
       }
       div.cards div.contrast {
         color: white;
@@ -116,6 +122,9 @@
       }
       div.day23 {
         background-image: url("screenshots/genuary-23.jpg");
+      }
+      div.day24 {
+        background-image: url("screenshots/genuary-24.jpg");
       }
     </style>
   </head>
@@ -201,6 +210,14 @@
         </div>
         <div class="day23">
           <a href="./23"><h2>23. abstract vegetation</h2></a>
+        </div>
+        <div class="day24 contrast">
+          <a href="./24"
+            ><h2>
+              23. create your own pseudo-random number generator and visually
+              check the results
+            </h2></a
+          >
         </div>
         <div class="day20-lego">
           <a href="./20-lego"
