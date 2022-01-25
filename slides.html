@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Slides</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1" />
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@500&family=Open+Sans:wght@300;600&display=swap");
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: "Open Sans", sans-serif;
+        font-size: 1.25vw;
+      }
+      #player {
+        position: absolute;
+        left: 0;
+        width: 60%;
+        top: 0;
+        bottom: 0;
+        background-size: cover;
+      }
+      #scroller {
+        overflow-y: scroll;
+        height: 100vh;
+        scroll-snap-type: y mandatory;
+        position: absolute;
+        right: 0;
+        width: 40%;
+        top: 0;
+        bottom: 0;
+      }
+      article {
+        scroll-snap-align: start;
+        display: flex;
+        height: 100vh;
+        flex-direction: column;
+        justify-content: center;
+        padding: 1em;
+      }
+      p {
+        margin-bottom: 1em;
+      }
+      ul {
+        /* list-style-type: none; */
+        margin-left: 2em;
+        margin-bottom: 1em;
+      }
+      article h2 {
+        font-family: Montserrat;
+        margin-bottom: 1em;
+      }
+      ul ul {
+        margin-bottom: 0;
+      }
+      #frame {
+        position: absolute;
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        border: none;
+        outline: none;
+      }
+      b {
+        font-weight: inherit;
+        color: #b70000;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="player"><iframe id="frame"></iframe></div>
+    <div id="scroller">
+      <article id="#-4">
+        <h2>Create coding in the land of WebGL2</h2>
+        <p>Jaume Sanchez<br />UI Engineer Visualization DeepMind</p>
+      </article>
+      <article id="#-3">
+        <h2>Why creative coding?</h2>
+      </article>
+      <article id="#-2">
+        <h2>Why <b>not</b> creative coding?</h2>
+      </article>
+      <article id="#-1">
+        <h2>Why <b>not</b> creative coding?</h2>
+        <p>It's liberating</p>
+        <p>It's fulfilling</p>
+        <p>It's fun</p>
+      </article>
+      <article id="#1">
+        <h2>How to start</h2>
+        <ul>
+          <li>Editor</li>
+          <li>Server</li>
+          <li>Chrome</li>
+          <li>Three.js</li>
+        </ul>
+        <p>No npm, no bundler, no tsc, no livereload</p>
+      </article>
+      <article id="#2">
+        <h2>How to start</h2>
+        <p>Template</p>
+        <ul>
+          <li>Index.html</li>
+          <li>Main module</li>
+        </ul>
+        <p>Import modules with common stuff</p>
+        <ul>
+          <li>renderer, scene, camera, resize handling</li>
+          <li>load models, envmaps</li>
+          <li>test scene and objects</li>
+        </ul>
+      </article>
+      <article id="#3">
+        <h2>Where to start</h2>
+        <ul>
+          <li>Prompts (Codevember, Genuary)</li>
+          <li>Inspiration / references:</li>
+          <ul>
+            <li>Social media (twittter, instagram)</li>
+            <li>same.enery</li>
+            <li>Pinterest/moodboards</li>
+            <li>NFT galleries</li>
+          </ul>
+          <li>Google images</li>
+        </ul>
+      </article>
+      <article id="#4">
+        <h2>Approach</h2>
+        <p>Start coding!</p>
+        <p>Add modules as needed: classes or functions</p>
+        <p>Iterate:</p>
+        <ul>
+          <li>Choose a theme, a goal, a technique</li>
+          <li>Don’t try to build the biggest thing in one go</li>
+          <li>Feel free to drop paths that don’t lead anywhere</li>
+          <li>Meandering is good</li>
+          <li>Fake it 'til you make it -or just fake it</li>
+          <li>Pick up old paths again</li>
+        </ul>
+      </article>
+      <article id="#5">
+        <h2>Tools</h2>
+        <p>Distributions</p>
+        <ul>
+          <li>Random noise 2D/3D/4D (cpu and gpu)</li>
+          <li>Noise (perlin, curl, fbm)</li>
+          <li>Poisson disk sampling (volume/sphere, area sphere, grid)</li>
+          <li>Fibonacci spiral 2D/3D</li>
+        </ul>
+      </article>
+      <article id="#6">
+        <h2>Geometries</h2>
+        <p>Procedural</p>
+        <p>Marchin Squares/Marching Cubes</p>
+        <p>SDF shrink-wrap / SDF MC</p>
+      </article>
+      <article id="#7">
+        <h2>Shading</h2>
+        <p>Half lambert, Phong, Blinn,</p>
+        <p>Matcaps</p>
+        <p>SDF effects</p>
+        <p>NPR</p>
+        <p>Be creative!</p>
+      </article>
+      <article id="#8">
+        <h2>Renderers</h2>
+        <p>Particles/point cloud</p>
+        <p>Mesh lines</p>
+        <p>DOF lines / Accumulation</p>
+        <p>Volume renderer</p>
+      </article>
+      <article id="#9">
+        <h2>Post</h2>
+        <p>FXAA</p>
+        <p>Blur, sharpen, convolution kernels</p>
+        <p>Bloom</p>
+        <p>SSAO</p>
+        <p>Levels and blend modes (Photoshop)</p>
+        <p>Vignette</p>
+        <p>Noise, film grain</p>
+        <p>RGB shift, chromatic aberration, barrel distortion</p>
+      </article>
+      <article id="#10">
+        <h2>Utils</h2>
+        <p>Relaxation for meshes and particles</p>
+        <p>Physics</p>
+        <p>Shader Passes:</p>
+        <ul>
+          <li>Shader Texture</li>
+          <li>Shader Pass</li>
+          <li>Shader PingPong Pass</li>
+        </ul>
+      </article>
+      <article id="#11">
+        <h2>Tools</h2>
+        <p>DevTools responsive mode</p>
+        <p>CaptureCanvas Chrome extension</p>
+        <p>CCapture.js</p>
+        <p>OBS</p>
+      </article>
+      <article id="#12">
+        <h2>Attraction</h2>
+        <p>GPGPU simulation</p>
+        <ul>
+          <li>Position + Life</li>
+          <li>Velocities + Mass</li>
+        </ul>
+        <p>3D texture for charge field</p>
+        <p>N-to-n cached + 1-to-n in shader</p>
+        <p>2D texture for color gradient</p>
+        <p>Post with bloom and chromatic aberration.</p>
+      </article>
+      <article id="#13">
+        <h2>Stone</h2>
+        <p>
+          Stone is generated in shader with a combination of SDFs, voronoise,
+          fBm, and twist operations. Only calculated once.
+        </p>
+        <p>
+          There's a buffer for the surface color (matcap with frost factor,
+          rim/curvature)
+        </p>
+        <p>
+          Positions at the front, positions at the back, normals at the front.
+        </p>
+        <p>
+          A 3D texture of Perlin noise is raymarched to create the inner glow.
+        </p>
+        <p>Final composite with post: bloom</p>
+      </article>
+      <article id="#14">
+        <h2>PRNG</h2>
+        <p>Distribution of points based on Poisson Disk sampling</p>
+        <p>Relaxation to separate objects</p>
+        <p>Instancing of meshes</p>
+        <p>glTF model of die</p>
+        <p>Multirendertarget for SSAO</p>
+        <p>Multisampled rendertarget for color pass.</p>
+        <p>Postprocessing</p>
+      </article>
+      <article id="#15">
+        <h2>Thank you!</h2>
+        <p>@thespite on twitter</p>
+        <p>github.com/spite</p>
+        <p>clicktorelease.com</p>
+      </article>
+    </div>
+  </body>
+  <script type="module">
+    const frame = document.querySelector("#frame");
+    const player = document.querySelector("#player");
+
+    const links = [];
+    links[2] = "./slides/1.png";
+    links[3] = "./slides/2.png";
+    links[4] = "./slides/3.png";
+    links[5] = "http://localhost:8080/1/";
+    links[6] = "http://localhost:8081/10/";
+    links[7] = "http://localhost:8080/17/";
+    links[8] = "http://localhost:8080/16/";
+    links[9] = "http://localhost:8080/20/";
+    links[10] = "http://localhost:8081/22/";
+    links[12] = "http://localhost:8081/17/";
+    links[11] = "./slides/11.png";
+    links[13] = "http://localhost:8081/7/";
+    links[14] = "http://localhost:8080/24/";
+    links[15] = "./slides/last.png";
+
+    const options = {
+      root: document.querySelector("#scroller"),
+      rootMargin: "0px",
+      threshold: 1.0,
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      for (const entry of entries) {
+        if (entry.intersectionRatio === 1) {
+          const url = links[entry.target.id.substr(1)];
+          player.style.backgroundImage = "";
+
+          if (!url) {
+            frame.hidden = true;
+          } else {
+            if (url.indexOf("http") !== -1) {
+              frame.hidden = false;
+              frame.setAttribute("src", url);
+            } else {
+              frame.hidden = true;
+              player.style.backgroundImage = `url(${url})`;
+            }
+          }
+        }
+      }
+    }, options);
+
+    const articles = document.querySelectorAll("article");
+    articles.forEach((a) => observer.observe(a));
+  </script>
+</html>
