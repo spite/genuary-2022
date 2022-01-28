@@ -86,7 +86,9 @@ class Gum {
 
     try {
       stream = await navigator.mediaDevices.getUserMedia(constraints);
-      this.deviceNameLabel.textContent = device.label;
+      this.deviceNameLabel.textContent = device.label
+        ? device.label
+        : "Unlabeled camera";
       this.createVideoElement();
       this.video.srcObject = stream;
     } catch (err) {
