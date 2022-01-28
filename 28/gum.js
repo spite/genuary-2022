@@ -20,7 +20,7 @@ class Gum {
     this.video = document.createElement("video");
     this.video.autoplay = true;
     this.video.playsinline = true;
-    this.video.addEventListener("playing", () => {
+    this.video.addEventListener("loadeddata", () => {
       this.resolveLoadedData();
     });
     // document.body.append(this.video);

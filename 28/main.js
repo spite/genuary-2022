@@ -38,7 +38,7 @@ camera.near = 0.0001;
 camera.far = 10;
 camera.updateProjectionMatrix();
 
-camera.position.set(0, 0, -1);
+camera.position.set(0.1, 0.1, -1);
 camera.lookAt(scene.position);
 
 const ssao = new SSAO();
@@ -139,7 +139,7 @@ let angleTo = angle;
 
 let WIDTH = -1;
 let HEIGHT = -1;
-let geometry = brick;
+let geometry = box;
 
 window.addEventListener("keydown", (e) => {
   if (e.code === "Space") {
