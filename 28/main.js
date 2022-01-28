@@ -124,7 +124,7 @@ const noiseTexture = new ShaderTexture(
   LinearFilter
 );
 
-ssao.colorMap = color; // copyPass.texture;
+ssao.colorMap = copyPass.texture;
 ssao.heightMap = height.texture;
 ssao.noiseMap = noiseTexture.texture;
 
