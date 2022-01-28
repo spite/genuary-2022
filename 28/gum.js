@@ -1,9 +1,9 @@
 class Gum {
-  constructor() {
+  constructor(deviceNameElement, nextDeviceButton) {
     this.invalidateVideoSource();
 
-    this.deviceNameLabel = document.createElement("p"); // this.shadowRoot.querySelector("#deviceName");
-    this.nextDeviceButton = document.createElement("div"); // this.shadowRoot.querySelector("#nextDevice");
+    this.deviceNameLabel = deviceNameElement;
+    this.nextDeviceButton = nextDeviceButton;
     this.currentVideoInput = 0;
     this.devices = {
       audioinput: [],
@@ -23,7 +23,6 @@ class Gum {
     this.video.addEventListener("loadeddata", () => {
       this.resolveLoadedData();
     });
-    // document.body.append(this.video);
 
     this.init();
   }
@@ -36,7 +35,7 @@ class Gum {
       this.invalidateVideoSource();
       this.getMedia(this.devices.videoinput[this.currentVideoInput]);
     } else {
-      this.nextDeviceButton.style.display = "block";
+      this.nextDeviceButton.style.display = "initial";
       this.currentVideoInput = 0;
       this.invalidateVideoSource();
       this.getMedia(this.devices.videoinput[this.currentVideoInput]);

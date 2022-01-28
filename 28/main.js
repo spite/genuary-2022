@@ -44,7 +44,11 @@ camera.lookAt(scene.position);
 const ssao = new SSAO();
 const post = new Post(renderer);
 
-const gum = new Gum();
+const gum = new Gum(
+  document.querySelector("#device"),
+  document.querySelector("#nextDeviceBtn")
+);
+
 const faceGeometry = new FaceMeshFaceGeometry({ useVideoTexture: true });
 const faceCamera = new OrthographicCamera(1, 1, 1, 1, -50, 50);
 
