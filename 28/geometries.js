@@ -24,6 +24,12 @@ cap.rotateY((Math.PI * 2) / 36);
 const brick = mergeGeometries([block, top, cap]);
 
 const box = new RoundedBoxGeometry(1, 1, 1, 0.1, 2);
+// const box = new BoxBufferGeometry(1, 1, 1);
 const capsule = new IcosahedronBufferGeometry(0.75, 5);
 
-export { brick, box, capsule };
+const stick = new CylinderBufferGeometry(0.25, 0.25, 1, 9, 1).toNonIndexed();
+const ball = new IcosahedronBufferGeometry(0.5, 5).toNonIndexed();
+ball.translate(0, 1 / 2, 0);
+const pin = mergeGeometries([ball, stick]);
+
+export { brick, box, capsule, pin };

@@ -27,7 +27,7 @@ import {
 import { getFBO } from "../modules/fbo.js";
 import { SSAO } from "./SSAO.js";
 import { Post } from "./post.js";
-import { brick, box, capsule } from "./geometries.js";
+import { brick, box, capsule, pin } from "./geometries.js";
 import { randomInRange } from "../modules/Maf.js";
 import { ShaderPass } from "../modules/ShaderPass.js";
 import { shader as orthoVs } from "../shaders/ortho.js";
@@ -167,6 +167,10 @@ window.addEventListener("keydown", (e) => {
     geometry = capsule;
     generate(WIDTH, HEIGHT, geometry);
   }
+  if (e.code === "KeyP") {
+    geometry = pin;
+    generate(WIDTH, HEIGHT, geometry);
+  }
   if (e.code === "Digit1") {
     if (WIDTH !== 50) {
       generate(50, 50, geometry);
@@ -232,7 +236,13 @@ document.querySelector("#capsuleBtn").addEventListener("click", (e) => {
   generate(WIDTH, HEIGHT, geometry);
 });
 
+document.querySelector("#pinBtn").addEventListener("click", (e) => {
+  geometry = pin;
+  generate(WIDTH, HEIGHT, geometry);
+});
+
 function generate(w, h, geoSrc) {
+  const pins = geoSrc === pin;
   const geometry = geoSrc.clone();
   WIDTH = w;
   HEIGHT = h;
@@ -246,23 +256,38 @@ function generate(w, h, geoSrc) {
   copyPass.setSize(w, h);
   height.setSize(w, h);
   ssao.shader.uniforms.dimensions.value.set(w, h);
-  ssao.shader.uniforms.blockiness.value = 40 * (w / 100);
+  ssao.shader.uniforms.blockiness.value = pins ? 100 : 40 * (w / 100);
 
   noiseTexture.render();
 
   const points = [];
   const dummy = new Object3D();
 
-  geometry.scale(1 / w, 1 / w, 1 / w);
-  const e = 0;
-  for (let y = 0; y < h; y++) {
-    for (let x = 0; x < w; x++) {
-      dummy.position.set(
-        x / w + randomInRange(-e, e),
-        0 + randomInRange(-e, e),
-        y / h + randomInRange(-e, e)
-      );
-      points.push(dummy.position.clone());
+  if (pins) {
+    geometry.scale(1 / w, 1 / w, 1 / w);
+    const s = 1 / w;
+    const f = Math.sqrt(3);
+    for (let y = 0; y < h; y++) {
+      for (let x = 0; x < w; x++) {
+        dummy.position.set(x / w, 0, ((y / h) * f) / 2);
+        if (y % 2 === 1) {
+          dummy.position.x += s / 2;
+        }
+        points.push(dummy.position.clone());
+      }
+    }
+  } else {
+    geometry.scale(1 / w, 1 / w, 1 / w);
+    const e = 0;
+    for (let y = 0; y < h; y++) {
+      for (let x = 0; x < w; x++) {
+        dummy.position.set(
+          x / w + randomInRange(-e, e),
+          0 + randomInRange(-e, e),
+          y / h + randomInRange(-e, e)
+        );
+        points.push(dummy.position.clone());
+      }
     }
   }
 
@@ -275,6 +300,13 @@ function generate(w, h, geoSrc) {
     mesh.setMatrixAt(i, dummy.matrix);
   }
   mesh.rotation.x = -Math.PI / 2;
+
+  ssao.shader.uniforms.pins.value = pins;
+  ssao.ssaoShader.uniforms.attenuation.value.set(
+    pins ? 0.25 : 1,
+    pins ? 10 : 2.5
+  );
+
   running = true;
 }
 

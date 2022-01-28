@@ -10,6 +10,7 @@ import {
   Vector2,
   PlaneBufferGeometry,
   OrthographicCamera,
+  TextureLoader,
 } from "../third_party/three.module.js";
 import { shader as orthoVs } from "../shaders/ortho.js";
 import { shader as hsl } from "../shaders/hsl.js";
@@ -38,6 +39,7 @@ out vec3 vNormal;
 out vec3 vPosition;
 out vec3 vColor;
 out vec3 lDir;
+out vec4 vEyePosition;
 
 void main() {
   vNormal = normalMatrix * normal;
@@ -61,6 +63,7 @@ void main() {
   }
   vec4 mvPosition = modelViewMatrix * instanceMatrix * vec4(pp - vec3(.5, 0., .5), 1.0);
   vPosition = mvPosition.xyz / mvPosition.w;
+  vEyePosition = mvPosition;
   gl_Position = projectionMatrix * mvPosition;
 }`;
 
@@ -72,15 +75,25 @@ layout(location = 2) out vec4 normal;
 
 uniform float near;
 uniform float far;
-uniform sampler2D colorMap;
+uniform sampler2D matcap;
+
+uniform bool pins;
 
 in vec3 vPosition;
 in vec3 vNormal;
 in vec3 lDir;
 in vec3 vColor;
+in vec4 vEyePosition;
 
 float linearizeDepth(float z) {
   return (2.0 * near) / (far + near - z * (far - near));	
+}
+
+vec2 matCapUV(in vec3 eye, in vec3 normal) {
+  vec3 r = reflect(eye, normal);
+  float m = 2.82842712474619 * sqrt(r.z + 1.0);
+  vec2 vN = r.xy / m + .5;
+  return vN;
 }
 
 ${hsl}
@@ -91,22 +104,29 @@ void main() {
   // vec3 n = normalize(cross(X,Y));
   vec3 n = normalize(vNormal);
 
-  float diffuse = .5 + .5 * max(0., dot(n, lDir));
-  vec3 c = vColor;
+  if(pins) {      
+    vec2 vN = matCapUV(normalize(vEyePosition.xyz), n);
+    vec4 mc = texture(matcap, vN);
+    color = mc;
+  } else {
+    float diffuse = .5 + .5 * max(0., dot(n, lDir));
+    vec3 c = vColor;
 
-  vec3 e = normalize(-vPosition.xyz);
-  vec3 h = normalize(lDir + e);
-  float specular = clamp(pow(max(dot(n, h), 0.), 80.), 0., 1.);
+    vec3 e = normalize(-vPosition.xyz);
+    vec3 h = normalize(lDir + e);
+    float specular = clamp(pow(max(dot(n, h), 0.), 80.), 0., 1.);
 
-  vec3 modColor = rgb2hsv(c);
-  modColor.x += .01 * diffuse;
-  modColor.z += .1 * specular;
-  modColor = hsv2rgb(modColor);
+    vec3 modColor = rgb2hsv(c);
+    modColor.x += .01 * diffuse;
+    modColor.z += .1 * specular;
+    modColor = hsv2rgb(modColor);
 
-  modColor *= diffuse;
-  modColor = mix(modColor, vec3(1.,1.,1.), .5 * specular);
-  
-  color = vec4(modColor , 1.);
+    modColor *= diffuse;
+    modColor = mix(modColor, vec3(1.,1.,1.), .5 * specular);
+
+    color = vec4(modColor , 1.);
+  }
+
   float d = linearizeDepth(length( vPosition ));
   position = vec4(vPosition, d);
   normal = vec4(n, 1.);
@@ -219,6 +239,9 @@ void main() {
   // fragColor = vec4(1., 0., 1., 1.);
 }`;
 
+const loader = new TextureLoader();
+const matcap = loader.load("../assets/metal-matcap.jpg");
+
 class SSAO {
   constructor() {
     this.renderTarget = new WebGLMultipleRenderTargets(1, 1, 3);
@@ -238,6 +261,8 @@ class SSAO {
         time: { value: 0 },
         blockiness: { value: 40 },
         dimensions: { value: new Vector2(50, 50) },
+        matcap: { value: matcap },
+        pins: { value: false },
       },
       vertexShader,
       fragmentShader,
