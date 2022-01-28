@@ -28,7 +28,7 @@ const box = new RoundedBoxGeometry(1, 1, 1, 0.1, 2);
 const capsule = new IcosahedronBufferGeometry(0.75, 5);
 
 const stick = new CylinderBufferGeometry(0.25, 0.25, 1, 9, 1).toNonIndexed();
-const ball = new IcosahedronBufferGeometry(0.5, 5).toNonIndexed();
+const ball = new IcosahedronBufferGeometry(0.5, 1).toNonIndexed();
 ball.translate(0, 1 / 2, 0);
 const pin = mergeGeometries([ball, stick]);
 
