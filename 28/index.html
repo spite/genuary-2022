@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Genuary 2022 - Day 28 - Self portrait</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1" />
+    <link href="../styles/styles.css" rel="stylesheet" />
+    <style>
+      #log p {
+        margin: 0;
+        opacity: 1;
+        transition: opacity 500ms ease-out;
+        pointer-events: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="info">
+      <h2>Genuary 2022</h2>
+      <h1>28. Self portrait</h1>
+      <p>
+        Click and drag to move the camera.<br />
+        Press space to freeze the image.<br />
+        Press R to randomize.
+      </p>
+      <p>
+        <button id="pauseBtn">Pause</button>
+      </p>
+      <p>
+        Size&nbsp;
+        <button id="size1Btn">50</button>
+        <button id="size2Btn">100</button>
+        <button id="size3Btn">250</button>
+        <button id="size4Btn">500</button>
+      </p>
+      <p>
+        Brick&nbsp;
+        <button id="legoBtn">Lego</button>
+        <button id="boxBtn">Box</button>
+        <button id="capsuleBtn">Capsule</button>
+      </p>
+
+      <p>
+        Made with <a target="blank" href="https://threejs.org/">three.js</a>.
+      </p>
+      <div id="log"><p>Starting...</p></div>
+    </div>
+    <footer><a href="../">More Genuary</a></footer>
+  </body>
+  <script src="tf-core.js"></script>
+  <script src="tf-converter.js"></script>
+  <script src="tf-backend-webgl.js"></script>
+  <script src="face-landmarks-detection.js"></script>
+  <script src="main.js" type="module"></script>
+</html>
