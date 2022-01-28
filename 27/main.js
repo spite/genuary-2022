@@ -38,9 +38,6 @@ uniform vec3 colors[5];
 
 layout(location = 0) out vec4 color1;
 layout(location = 1) out vec4 color2;
-layout(location = 2) out vec4 color3;
-layout(location = 3) out vec4 color4;
-layout(location = 4) out vec4 color5;
 
 float luma(vec3 color) {
   return dot(color, vec3(0.299, 0.587, 0.114));
@@ -69,11 +66,8 @@ void main() {
 
   float a = 1.;//src.a;
 
-  color1 = vec4(vec3(weights[0]), a);
-  color2 = vec4(vec3(weights[1]), a);
-  color3 = vec4(vec3(weights[2]), a);
-  color4 = vec4(vec3(weights[3]), a);
-  color5 = vec4(vec3(weights[4]), a);
+  color1 = vec4(weights[0], weights[1], weights[2], 1.);
+  color2 = vec4(weights[3], weights[4], 0., a);
 }
 `;
 
@@ -91,7 +85,7 @@ const segmentationShader = new RawShaderMaterial({
 });
 const segmentationPass = new ShaderPass(segmentationShader);
 
-const segments = new WebGLMultipleRenderTargets(1, 1, colors.length);
+const segments = new WebGLMultipleRenderTargets(1, 1, 2);
 for (const texture of segments.texture) {
   texture.minFilter = NearestFilter;
   texture.magFilter = NearestFilter;
@@ -108,10 +102,12 @@ uniform vec3 colors[5];
 uniform sampler2D normals;
 uniform sampler2D map0;
 uniform sampler2D map1;
-uniform sampler2D map2;
-uniform sampler2D map3;
-uniform sampler2D map4;
 uniform sampler2D noiseTexture;
+
+uniform float t1;
+uniform float t2;
+uniform float t3;
+uniform float t4;
 
 out vec4 color;
 
@@ -153,7 +149,7 @@ float findBorder2(in sampler2D src, in vec2 uv, in vec2 resolution){
 	return edge;
 }
 
-float findBorder(in sampler2D src, in vec2 uv, in vec2 resolution, in float width){
+vec4 findBorder(in sampler2D src, in vec2 uv, in vec2 resolution, in float width){
 	float x = width / resolution.x;
 	float y = width / resolution.y;
 	vec4 horizEdge = vec4( 0.0 );
@@ -171,7 +167,7 @@ float findBorder(in sampler2D src, in vec2 uv, in vec2 resolution, in float widt
 	vertEdge += texture(src, vec2( uv.x    , uv.y + y ) ) * 2.0;
 	vertEdge += texture(src, vec2( uv.x + x, uv.y + y ) ) * 1.0;
 	vec4 edge = sqrt((horizEdge * horizEdge) + (vertEdge * vertEdge));
-	return 1. - aastep(.5, length(edge));
+	return edge;
 }
 
 float simplex(in vec3 v) {
@@ -192,14 +188,15 @@ vec2 perturb(in vec2 uv, in float noisiness, in float offset) {
   return uv + disp;
 }
 
-float hatch(in vec2 uv, in float a, in vec2 size) {
+float hatch(in vec2 uv, in float a, in vec2 size, in float w) {
   float s = sin(a);
   float c = cos(a);
   mat2 rot = mat2(c, -s, s, c);
   uv = rot * uv;
-  float e = fwidth(uv.x) * .5 * size.x;
-  float thickness = 1. - e + .1 * fbm3(vec3(uv, 0.));
-  return aastep( thickness, .5 + .5 * sin(uv.x  * 1000. * size.x / size.y));
+  float e = fwidth(uv.x) * t3 * size.x;
+  float t = t1 * (w-1.);
+  float thickness = 1. - e + t * fbm3(vec3(uv, 0.));
+  return t4 + (1.-t4) * aastep(thickness, .5 + .5 * sin(uv.x  * t2 * size.x / size.y));
 }
 
 ${hsl}
@@ -216,15 +213,10 @@ void main() {
   vec2 uv4 = perturb(vUv, 1.4, -123.);
 
   vec4 src0 = texture(map0, uv0);
-  vec4 src1 = texture(map1, uv1);
-  vec4 src2 = texture(map2, uv2);
-  vec4 src3 = texture(map3, uv3);
-  vec4 src4 = texture(map4, uv4);
-  color = vec4(src0.rgb * src0.a + src1.rgb * src1.a + src2.rgb * src2.a + src3.rgb * src3.a + src4.rgb * src4.a, 1.);
-  float a = (src0.a + src1.a + src2.a + src3.a + src4.a);
-  // color.rgb = mix(vec3(1.), color.rgb, a);
-
-  color.rgb = src0.rgb * colors[0].rgb + src1.rgb * colors[1].rgb  + src2.rgb * colors[2].rgb  + src3.rgb * colors[3].rgb  + src4.rgb * colors[4].rgb;
+  vec4 src1 = texture(map0, uv1);
+  vec4 src2 = texture(map0, uv2);
+  vec4 src3 = texture(map1, uv3);
+  vec4 src4 = texture(map1, uv4);
 
   vec2 size = vec2(textureSize(map0, 0));
 
@@ -232,28 +224,29 @@ void main() {
   color.rgb = vec3(1.);
 
   float wN = .4;
-  float bN = findBorder(normals, uvn, size, wN);
+  float bN = 1. - aastep(.5, length(findBorder(normals, uvn, size, wN)));
   
   float w = .15;
-  b = findBorder(map0, uv0, size, w);
-  color.rgb = step(.5, src0.rgb) *(colors[0].rgb * hatch(uv0, .1, size)) ;
+  b = 1. - aastep(.5, findBorder(map0, uv0, size, w).r);
+  color.rgb = step(.5, src0.r) *(colors[0].rgb * hatch(uv0, .1, size, src0.r)) ;
   
-  b += findBorder(map1, uv1, size, w);
-  color.rgb += step(.5, src1.rgb) *(colors[1].rgb * hatch(uv1, -.3, size)) ;
+  b += 1. - aastep(.5, findBorder(map0, uv1, size, w).g);
+  color.rgb += step(.5, src1.g) *(colors[1].rgb * hatch(uv1, -.3, size, src1.g)) ;
   
-  b += findBorder(map2, uv2, size, w);
-  color.rgb += step(.5, src2.rgb) *(colors[2].rgb * hatch(uv2, .5, size)) ;
+  b += 1. - aastep(.5, findBorder(map0, uv2, size, w).b);
+  color.rgb += step(.5, src2.b) *(colors[2].rgb * hatch(uv2, .5, size, src2.b)) ;
   
-  b += findBorder(map3, uv3, size, w);
-  color.rgb += step(.5, src3.rgb) *(colors[3].rgb * hatch(uv3, -.7, size)) ;
+  b += 1. - aastep(.5, findBorder(map1, uv3, size, w).r);
+  color.rgb += step(.5, src3.r) *(colors[3].rgb * hatch(uv3, -.7, size, src3.r)) ;
   
-  b += findBorder(map4, uv4, size, w);
-  color.rgb += step(.5, src4.rgb) *(colors[4].rgb * hatch(uv4, -.5, size)) ;
+  b += 1. - aastep(.5, findBorder(map1, uv4, size, w).g);
+  color.rgb += step(.5, src4.g) *(colors[4].rgb * hatch(uv4, -.5, size, src4.g)) ;
   
   color.rgb = rgb2hsv(color.rgb);
   color.y += b*bN / 10.;
   color.z -= b*bN / 10.;
-  color.rgb = hsv2rgb(color.rgb);  
+  color.rgb = hsv2rgb(color.rgb); 
+  
 }`;
 
 const loader = new TextureLoader();
@@ -267,15 +260,23 @@ const finalShader = new RawShaderMaterial({
     noiseTexture: { value: noiseTexture },
     map0: { value: segments.texture[0] },
     map1: { value: segments.texture[1] },
-    map2: { value: segments.texture[2] },
-    map3: { value: segments.texture[3] },
-    map4: { value: segments.texture[4] },
+    t1: { value: 1 },
+    t2: { value: 1000 },
+    t3: { value: 1 },
+    t4: { value: 0 },
   },
   vertexShader: orthoVs,
   fragmentShader: finalFs,
   glslVersion: GLSL3,
 });
 const finalPass = new ShaderPass(finalShader);
+
+function randomize() {
+  finalShader.uniforms.t1.value = randomInRange(0, 10);
+  finalShader.uniforms.t2.value = randomInRange(500, 1000);
+  finalShader.uniforms.t3.value = randomInRange(0, 1);
+  finalShader.uniforms.t4.value = randomInRange(0, 1);
+}
 
 const blurPasses = [];
 for (let i = 0; i < colors.length; i++) {
@@ -304,10 +305,17 @@ window.addEventListener("keydown", (e) => {
   if (e.code === "Space") {
     running = !running;
   }
+  if (e.code === "KeyR") {
+    randomize();
+  }
 });
 
 document.querySelector("#pauseBtn").addEventListener("click", (e) => {
   running = !running;
+});
+
+document.querySelector("#randomizeBtn").addEventListener("click", (e) => {
+  randomize();
 });
 
 function render() {
@@ -364,9 +372,6 @@ function render() {
   finalShader.uniforms.normals.value = blurNormals.output;
   finalShader.uniforms.map0.value = blurPasses[0].output;
   finalShader.uniforms.map1.value = blurPasses[1].output;
-  finalShader.uniforms.map2.value = blurPasses[2].output;
-  finalShader.uniforms.map3.value = blurPasses[3].output;
-  finalShader.uniforms.map4.value = blurPasses[4].output;
 
   finalPass.render(renderer, true);
 
