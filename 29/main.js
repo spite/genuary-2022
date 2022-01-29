@@ -3,7 +3,6 @@ import {
   scene,
   getControls,
   renderer,
-  addUpdate,
   camera,
   addResize,
   resize,
