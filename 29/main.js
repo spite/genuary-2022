@@ -161,6 +161,7 @@ function render() {
     }
   }
   update();
+  controls.update();
 
   renderer.setRenderTarget(color);
   renderer.render(scene, orthoCamera);
