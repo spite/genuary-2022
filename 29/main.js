@@ -97,7 +97,10 @@ function randomize(l, p) {
 
   packer = new Packer((p) => {
     if (p.rectangles.length < MAX) {
-      p.addRectangle();
+      const r = Math.min(MAX - p.rectangles.length, 2);
+      for (let i = 0; i < r; i++) {
+        p.addRectangle();
+      }
     }
   }, data);
 
@@ -155,8 +158,10 @@ function update() {
 }
 
 function render() {
-  for (let i = 0; i < 10; i++) {
-    packer.grow();
+  if (!packer.done) {
+    for (let i = 0; i < 10; i++) {
+      packer.grow();
+    }
   }
   update();
 
@@ -173,7 +178,7 @@ function render() {
   renderer.setAnimationLoop(render);
 }
 
-randomize("G", palettes[0]);
+randomize("E", palettes[3]);
 
 function myResize(w, h, dpr) {
   const d = 2;
