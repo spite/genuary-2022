@@ -192,7 +192,8 @@ void main() {
   vec2 pSize = vec2(textureSize(paper, 0));
   vec4 p = .5 + .5 * texture(paper, gl_FragCoord.xy / pSize);
 
-  fragColor.rgb = blend(p.rgb, c, 1.);
+  // fragColor.rgb = blend(p.rgb, c, 1.);
+  fragColor.rgb = p.rgb * c;
   fragColor.rgb *= .99 + .01 * b;
     
 
