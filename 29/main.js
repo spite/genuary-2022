@@ -194,7 +194,7 @@ resize();
 
 async function init() {
   await loaded;
-  randomize("E", palettes[3]);
+  randomize("G", palettes[0]);
   render();
 }
 
