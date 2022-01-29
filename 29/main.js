@@ -92,14 +92,20 @@ function randomize(l, p) {
   generateLetter(letter);
   const data = ctx.getImageData(0, 0, canvas.width, canvas.height);
 
-  packer = new Packer((p) => {
-    if (p.rectangles.length < MAX) {
-      const r = Math.min(MAX - p.rectangles.length, 2);
-      for (let i = 0; i < r; i++) {
-        p.addRectangle();
+  packer = new Packer(
+    (p) => {
+      if (p.rectangles.length < MAX) {
+        const r = Math.min(MAX - p.rectangles.length, 2);
+        for (let i = 0; i < r; i++) {
+          p.addRectangle();
+        }
       }
-    }
-  }, data);
+    },
+    data,
+    randomInRange(100, 300),
+    randomInRange(0, 1),
+    randomInRange(5, 10)
+  );
 
   packer.addRectangle();
 
@@ -156,7 +162,7 @@ function update() {
 
 function render() {
   if (!packer.done) {
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < 1; i++) {
       packer.grow();
     }
   }

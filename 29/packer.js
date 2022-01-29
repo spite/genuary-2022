@@ -1,16 +1,21 @@
 import { randomInRange } from "../modules/Maf.js";
 
 class Rectangle {
-  constructor(parent) {
+  constructor(parent, aspectRatioRange = 0.2, heightMin = 0, heightScale = 10) {
     this.x = 0;
     this.y = 0;
     this.w = 0;
     this.h = 0;
-    this.aspectRatio = randomInRange(0.8, 1.2);
+    this.aspectRatio = randomInRange(
+      1 - aspectRatioRange,
+      1 + aspectRatioRange
+    );
     this.area = 0;
     this.frozen = false;
     this.parent = parent;
     this.color = 0.5 + 0.5 * Math.random();
+    this.heightMin = heightMin;
+    this.heightScale = heightScale;
   }
 
   grow() {
@@ -24,7 +29,7 @@ class Rectangle {
     this.w += 2 * dw;
     this.h += 2 * dh;
     this.area = this.w * this.h;
-    this.height = this.area / 10;
+    this.height = this.heightMin + this.area / this.heightScale;
   }
 
   overlaps(b, m = 0) {
@@ -46,11 +51,21 @@ class Rectangle {
 }
 
 class Packer {
-  constructor(fn, map) {
-    this.maxArea = 300;
+  constructor(
+    fn,
+    map,
+    maxArea = 300,
+    aspectRatioRange = 0.2,
+    heightMin = 0,
+    heightScale = 10
+  ) {
+    this.maxArea = maxArea;
     this.rectangles = [];
     this.onFreezeCb = fn;
     this.map = map;
+    this.aspectRatioRange = aspectRatioRange;
+    this.heightMin = heightMin;
+    this.heightScale = heightScale;
   }
 
   checkMap(x, y) {
@@ -62,7 +77,12 @@ class Packer {
   }
 
   addRectangle() {
-    const r = new Rectangle(this);
+    const r = new Rectangle(
+      this,
+      this.aspectRatio,
+      this.heightMin,
+      this.heightScale
+    );
     let tries = 0;
     let valid = false;
     const margin = 0;
