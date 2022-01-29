@@ -1,7 +1,4 @@
 import {
-  BoxBufferGeometry,
-  Mesh,
-  MeshNormalMaterial,
   sRGBEncoding,
   PerspectiveCamera,
   Scene,
@@ -18,8 +15,6 @@ const renderer = new WebGLRenderer({
 document.body.append(renderer.domElement);
 renderer.outputEncoding = sRGBEncoding;
 renderer.setPixelRatio(window.devicePixelRatio);
-// const gl = renderer.getContext();
-// gl.enable(gl.SAMPLE_ALPHA_TO_COVERAGE);
 
 const scene = new Scene();
 
@@ -63,13 +58,10 @@ function addResize(fn) {
 
 window.addEventListener("resize", () => resize());
 
-// const mesh = new Mesh(new BoxBufferGeometry(1, 1, 1), new MeshNormalMaterial());
-// scene.add(mesh);
-
 resize();
 
-function getControls() {
-  const controls = new OrbitControls(camera, renderer.domElement);
+function getControls(cam = camera) {
+  const controls = new OrbitControls(cam, renderer.domElement);
   return controls;
 }
 
