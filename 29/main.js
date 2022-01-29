@@ -199,3 +199,5 @@ async function init() {
 }
 
 init();
+
+window.generate = (l) => randomize(l);
