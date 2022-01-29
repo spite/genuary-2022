@@ -13,16 +13,14 @@ import {
   Color,
   InstancedMesh,
   DynamicDrawUsage,
-  MeshNormalMaterial,
   Object3D,
   OrthographicCamera,
-  RawShaderMaterial,
 } from "../third_party/three.module.js";
 import { Packer } from "./packer.js";
 import { colorShader } from "./color.js";
 import { getFBO } from "../modules/fbo.js";
 import { BlurPass } from "../27/blur.js";
-import { waterColorPass } from "./watercolor.js";
+import { waterColorPass, loaded } from "./watercolor.js";
 
 const MAX = 1000;
 
@@ -178,8 +176,6 @@ function render() {
   renderer.setAnimationLoop(render);
 }
 
-randomize("E", palettes[3]);
-
 function myResize(w, h, dpr) {
   const d = 2;
   const aspect = w / h;
@@ -195,4 +191,11 @@ function myResize(w, h, dpr) {
 addResize(myResize);
 
 resize();
-render();
+
+async function init() {
+  await loaded;
+  randomize("E", palettes[3]);
+  render();
+}
+
+init();

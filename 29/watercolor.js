@@ -202,7 +202,11 @@ void main() {
 }`;
 
 const loader = new TextureLoader();
-const paper = loader.load("../assets/Watercolor_ColdPress.jpg");
+let resFn;
+const loaded = new Promise((resolve, reject) => {
+  resFn = resolve;
+});
+const paper = loader.load("../assets/Watercolor_ColdPress.jpg", resFn);
 
 const waterColorShader = new RawShaderMaterial({
   uniforms: {
@@ -217,4 +221,4 @@ const waterColorShader = new RawShaderMaterial({
 
 const waterColorPass = new ShaderPass(waterColorShader);
 
-export { waterColorPass };
+export { waterColorPass, loaded };
