@@ -84,9 +84,9 @@ scene.add(mesh);
 let packer;
 
 function randomize(l, p) {
-  waterColorPass.shader.uniforms.colors.value = palettes[
-    p || Math.floor(Math.random() * palettes.length)
-  ].map((e) => new Color(e));
+  waterColorPass.shader.uniforms.colors.value = (
+    p || palettes[Math.floor(Math.random() * palettes.length)]
+  ).map((e) => new Color(e));
 
   const letter = l || randomString(1, "aA#!");
   console.log(letter);
@@ -171,7 +171,7 @@ function render() {
   renderer.setAnimationLoop(render);
 }
 
-randomize("G", 0);
+randomize("G", palettes[0]);
 
 function myResize(w, h, dpr) {
   const d = 2;
