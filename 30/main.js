@@ -17,6 +17,7 @@ import { createCurl } from "./curl.js";
 import { createCurl as createCurl2 } from "./curl2.js";
 import { SSAO } from "./SSAO.js";
 import { Post } from "./post.js";
+import { clamp } from "../modules/Maf.js";
 
 const ssao = new SSAO();
 const post = new Post(renderer);
@@ -90,6 +91,7 @@ function render() {
   prevTime = time;
 
   t += dt / 500;
+  t = clamp(t, 0, 1);
   update(t);
 
   ssao.render(renderer, scene, camera);
