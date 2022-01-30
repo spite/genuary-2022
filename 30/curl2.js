@@ -15,9 +15,7 @@ import { pointsOnSphere } from "../modules/Fibonacci.js";
 
 const minLength = 60;
 const maxLength = 120;
-const twistiness = 1 * 0.2;
-const randomness = 1 * 0.25;
-const arms = 50;
+let arms;
 
 const up = new Vector3(0, 1, 0);
 
@@ -63,6 +61,7 @@ function lerp(frames, i) {
 }
 
 function createCurl() {
+  arms = ~~randomInRange(10, 90);
   fn = generateNoiseFunction();
   const seeds = pointsOnSphere(arms);
   const twistiness = randomInRange(0.1, 0.5);

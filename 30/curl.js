@@ -15,7 +15,7 @@ import { pointsOnSphere } from "../modules/Fibonacci.js";
 
 const minLength = 60;
 const maxLength = 120;
-const arms = 50;
+let arms;
 
 const up = new Vector3(0, 1, 0);
 
@@ -29,8 +29,6 @@ function createArm(points, o, twistiness, random, mark) {
   const prevPos = new Vector3();
   const m = new Matrix4();
   const q = new Quaternion();
-  const q2 = new Quaternion();
-  const n = new Vector3();
   const prevDir = new Vector3();
 
   const d = 10;
@@ -70,6 +68,7 @@ function createArm(points, o, twistiness, random, mark) {
 
 function createCurl() {
   fn = generateNoiseFunction();
+  arms = ~~randomInRange(10, 90);
   const seeds = pointsOnSphere(arms);
   const random = Math.random() > 0.75;
   const twistiness = randomInRange(0.1, 0.2);

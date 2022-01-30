@@ -13,7 +13,7 @@ const minLength = 60;
 const maxLength = 120;
 let twistiness;
 let randomness;
-const arms = 50;
+let arms;
 
 const up = new Vector3(0, 1, 0);
 
@@ -85,6 +85,7 @@ function createArm(points, random) {
 }
 
 function createEldritch() {
+  arms = ~~randomInRange(10, 90);
   twistiness = randomInRange(0.05, 0.3);
   randomness = randomInRange(0, 0.5);
   const random = Math.random() > 0.75;
