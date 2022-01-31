@@ -1,6 +1,8 @@
 import { Vector2, Vector3 } from "../third_party/three.module.js";
 import { randomInRange, clamp, mix } from "../modules/Maf.js";
 
+// https://www.iquilezles.org/www/articles/distfunctions/distfunctions.htm
+
 function sdTorus(p, t) {
   const pp = new Vector2(p.x, p.y);
   const q = new Vector2(pp.length() - t.x, p.z);
