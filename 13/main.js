@@ -20,6 +20,7 @@ import {
   RGBFormat,
   LinearFilter,
   MeshNormalMaterial,
+  Vector3,
 } from "../third_party/three.module.js";
 import { ShaderPingPongPass } from "../modules/ShaderPingPongPass.js";
 import { randomInRange } from "../modules/Maf.js";
@@ -100,31 +101,11 @@ void main() {
   color = c;
 }`;
 
-const d = 1.5;
-const origins = new Float32Array(LINES * 3);
-for (let i = 0; i < LINES; i++) {
-  origins[i * 3] = randomInRange(-d, d);
-  origins[i * 3 + 1] = randomInRange(-d, d);
-  origins[i * 3 + 2] = randomInRange(-d, d);
-}
-const originTex = new DataTexture(
-  origins,
-  1,
-  LINES,
-  RGBFormat,
-  FloatType,
-  undefined,
-  undefined,
-  undefined,
-  NearestFilter,
-  NearestFilter
-);
-
 const step = 4;
 
 const simShader = new RawShaderMaterial({
   uniforms: {
-    originTex: { value: originTex },
+    originTex: { value: null },
     speed: { value: step },
     noiseScale: { value: 1 },
     map: { value: null },
@@ -148,6 +129,10 @@ sim.setSize(POINTS, LINES);
 function getTextureFromPalette(palette) {
   const g = new GradientLinear(palette);
   const b = g.getAt(Math.random());
+  const tmp = new Vector3();
+  b.getHSL(tmp);
+  tmp.s = Math.min(tmp.s, 0.5);
+  b.setHSL(tmp.h, tmp.s, tmp.l);
   renderer.setClearColor(b, 1);
   ssao.shader.uniforms.background.value = b;
   const gradientData = new Uint8Array(palette.length * 3);
@@ -193,6 +178,27 @@ const pointMesh = new InstancedMesh(geo, pointMat, LINES * POINTS);
 scene.add(pointMesh);
 
 function randomize() {
+  const d = randomInRange(1, 3);
+  const origins = new Float32Array(LINES * 3);
+  for (let i = 0; i < LINES; i++) {
+    origins[i * 3] = randomInRange(-d, d);
+    origins[i * 3 + 1] = randomInRange(-d, d);
+    origins[i * 3 + 2] = randomInRange(-d, d);
+  }
+  const originTex = new DataTexture(
+    origins,
+    1,
+    LINES,
+    RGBFormat,
+    FloatType,
+    undefined,
+    undefined,
+    undefined,
+    NearestFilter,
+    NearestFilter
+  );
+
+  simShader.uniforms.originTex.value = originTex;
   const palette = palettes[Math.floor(Math.random() * palettes.length)];
   ssao.shader.uniforms.gradient.value = getTextureFromPalette(palette);
   simShader.uniforms.noiseScale.value = randomInRange(0.5, 2);

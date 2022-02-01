@@ -79,8 +79,6 @@ ${fxaa}
 void main() {
   vec2 uv = .8 * (vUv - .5) + .5;
   fragColor = fxaa(inputTexture, vUv);
-
-  // fragColor = chromaticAberration(inputTexture, uv, .1, (vUv-.5) );
 }`;
 
 class Post {

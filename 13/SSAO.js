@@ -96,11 +96,11 @@ void main() {
   float diffuse = .5 + .5 * max(0., dot(n, l));
   color = vec4(vColor * diffuse, 1.);
 
-  float rimPower = 1.;
+  float rimPower = 10.;
   float useRim = 1.;
   float f = rimPower * abs( dot( n, normalize( vPosition ) ) );
   f = clamp( 0., 1., useRim * ( 1. - smoothstep( 0.0, 1., f ) ) );
-  color.rgb = mix(color.rgb, background, .1 * f);
+  color.rgb = mix(color.rgb, background, 1.* f);
 
   float d = linearizeDepth(length( vPosition ));
   position = vec4(vPosition, d);
