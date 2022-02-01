@@ -304,7 +304,7 @@ function render() {
   renderer.render(scene, camera);
   renderer.setRenderTarget(null);
 
-  post.render(colorFBO);
+  post.render(colorFBO.texture);
 
   renderer.setAnimationLoop(render);
 }

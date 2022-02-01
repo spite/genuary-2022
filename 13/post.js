@@ -13,7 +13,6 @@ import { shader as vignette } from "../shaders/vignette.js";
 import { shader as noise } from "../shaders/noise.js";
 import { shader as screen } from "../shaders/screen.js";
 import { BloomPass } from "../modules/bloomPass.js";
-import { shader as chromaticAberration } from "../shaders/chromatic-aberration.js";
 
 const finalFragmentShader = `
 precision highp float;
