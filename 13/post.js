@@ -59,12 +59,29 @@ void main() {
   b +=  8.*b3 / 40.;
   b +=  16.*b4 / 40.;
 
-  fragColor = screen(color, b, 1.);
+  fragColor = screen(color, b, .5 );
   fragColor *= vignette(vUv, vignetteBoost, vignetteReduction);
-  // fragColor.rgb = finalLevels(fragColor.rgb, vec3(0.), vec3(1.1), vec3(.9));
+  fragColor.rgb = finalLevels(fragColor.rgb, vec3(.1), vec3(.8), vec3(.9));
   fragColor += .01 * noise(gl_FragCoord.xy + vec2(time, 0.));
 }
 `;
+
+const colorFragmentShader = `precision highp float;
+
+uniform sampler2D inputTexture;
+
+in vec2 vUv;
+
+out vec4 fragColor;
+
+${fxaa}
+
+void main() {
+  vec2 uv = .8 * (vUv - .5) + .5;
+  fragColor = fxaa(inputTexture, vUv);
+
+  // fragColor = chromaticAberration(inputTexture, uv, .1, (vUv-.5) );
+}`;
 
 class Post {
   constructor(renderer, params = {}) {
@@ -73,10 +90,9 @@ class Post {
     this.finalShader = new RawShaderMaterial({
       uniforms: {
         resolution: { value: new Vector2(1, 1) },
-        vignetteBoost: { value: params.vignetteBoost || 1.1 },
-        vignetteReduction: { value: params.vignetteReduction || 0.2 },
+        vignetteBoost: { value: params.vignetteBoost || 1 },
+        vignetteReduction: { value: params.vignetteReduction || 0.4 },
         inputTexture: { value: null },
-        inputTexture2: { value: null },
         blur0Texture: { value: null },
         blur1Texture: { value: null },
         blur2Texture: { value: null },
@@ -97,7 +113,17 @@ class Post {
       wrapT: ClampToEdgeWrapping,
     });
 
-    this.bloomPass = new BloomPass(5, 5);
+    const rgbShader = new RawShaderMaterial({
+      uniforms: {
+        inputTexture: { value: this.finalPass.texture },
+      },
+      vertexShader: orthoVertexShader,
+      fragmentShader: colorFragmentShader,
+      glslVersion: GLSL3,
+    });
+    this.rgbPass = new ShaderPass(rgbShader);
+
+    this.bloomPass = new BloomPass(10, 5);
   }
 
   setSize(w0, h0, dpr) {
@@ -106,6 +132,7 @@ class Post {
     this.finalPass.setSize(w, h);
     this.finalShader.uniforms.resolution.value.set(w, h);
     this.bloomPass.setSize(w, h);
+    this.rgbPass.setSize(w, h);
   }
 
   render(src) {
@@ -125,7 +152,9 @@ class Post {
       this.bloomPass.blurPasses[4].texture;
     this.finalPass.shader.uniforms.time.value = Math.random() * 100000;
 
-    this.finalPass.render(this.renderer, true);
+    this.finalPass.render(this.renderer);
+
+    this.rgbPass.render(this.renderer, true);
   }
 }
 

@@ -100,7 +100,7 @@ void main() {
   color = c;
 }`;
 
-const d = 2.5;
+const d = 1.5;
 const origins = new Float32Array(LINES * 3);
 for (let i = 0; i < LINES; i++) {
   origins[i * 3] = randomInRange(-d, d);
