@@ -13,6 +13,8 @@ import { shader as vignette } from "../shaders/vignette.js";
 import { shader as noise } from "../shaders/noise.js";
 import { shader as screen } from "../shaders/screen.js";
 import { BloomPass } from "../modules/bloomPass.js";
+import { shader as fxaa } from "../shaders/fxaa.js";
+import { gammaCorrect, levelRange, finalLevels } from "../shaders/levels.js";
 
 const finalFragmentShader = `
 precision highp float;
@@ -36,10 +38,11 @@ in vec2 vUv;
 out vec4 fragColor;
 
 ${vignette}
-
 ${noise}
-
 ${screen}
+${gammaCorrect}
+${levelRange}
+${finalLevels}
 
 void main() {
   vec4 b0 = texture(blur0Texture, vUv);
@@ -56,10 +59,12 @@ void main() {
   b +=  8.*b3 / 40.;
   b +=  16.*b4 / 40.;
 
-  fragColor = screen(color, b, .5);
+  fragColor = screen(color, b, 1.);
   fragColor *= vignette(vUv, vignetteBoost, vignetteReduction);
+  // fragColor.rgb = finalLevels(fragColor.rgb, vec3(0.), vec3(1.1), vec3(.9));
   fragColor += .01 * noise(gl_FragCoord.xy + vec2(time, 0.));
-}`;
+}
+`;
 
 class Post {
   constructor(renderer, params = {}) {
@@ -68,9 +73,10 @@ class Post {
     this.finalShader = new RawShaderMaterial({
       uniforms: {
         resolution: { value: new Vector2(1, 1) },
-        vignetteBoost: { value: params.vignetteBoost || 1 },
+        vignetteBoost: { value: params.vignetteBoost || 1.1 },
         vignetteReduction: { value: params.vignetteReduction || 0.2 },
         inputTexture: { value: null },
+        inputTexture2: { value: null },
         blur0Texture: { value: null },
         blur1Texture: { value: null },
         blur2Texture: { value: null },

@@ -19,6 +19,7 @@ import {
   RGBAFormat,
   RGBFormat,
   LinearFilter,
+  MeshNormalMaterial,
 } from "../third_party/three.module.js";
 import { ShaderPingPongPass } from "../modules/ShaderPingPongPass.js";
 import { randomInRange } from "../modules/Maf.js";
@@ -38,8 +39,10 @@ import { Post } from "./post.js";
 import { getFBO } from "../modules/fbo.js";
 import { shader as hsl } from "../shaders/hsl.js";
 import { GradientLinear } from "../modules/gradient-linear.js";
+import { SSAO } from "./SSAO.js";
 
 const post = new Post(renderer);
+const ssao = new SSAO();
 
 const controls = getControls();
 
@@ -144,7 +147,9 @@ sim.setSize(POINTS, LINES);
 
 function getTextureFromPalette(palette) {
   const g = new GradientLinear(palette);
-  renderer.setClearColor(g.getAt(Math.random()), 1);
+  const b = g.getAt(Math.random());
+  renderer.setClearColor(b, 1);
+  ssao.shader.uniforms.background.value = b;
   const gradientData = new Uint8Array(palette.length * 3);
   for (let i = 0; i < palette.length; i++) {
     const c = new Color(palette[i]);
@@ -157,68 +162,6 @@ function getTextureFromPalette(palette) {
   gradient.magFilter = LinearFilter;
   return gradient;
 }
-
-const pointVs = `precision highp float;
-
-in vec3 position;
-in vec3 normal;
-in vec2 offset;
-
-uniform sampler2D points;
-uniform mat4 modelViewMatrix;
-uniform mat4 projectionMatrix;
-uniform mat3 normalMatrix;
-
-uniform sampler2D gradient;
-
-uniform vec3 coords[3];
-
-out vec3 vNormal;
-out vec3 vColor;
-
-mat3 calcLookAtMatrix(vec3 origin, vec3 target, float roll) {
-  vec3 rr = vec3(sin(roll), cos(roll), 0.0);
-  vec3 ww = normalize(target - origin);
-  vec3 uu = normalize(cross(ww, rr));
-  vec3 vv = normalize(cross(uu, ww));
-
-  return mat3(uu, vv, ww);
-}
-
-${hsl}
-
-void main() {
-  vec2 inc = 1. / vec2(80., 800.);
-  vec2 coord = vec2(offset.x + .5 * inc.x, offset.y + .5 * inc.y);
-  vec2 coord2 = vec2(offset.x + 1.5 * inc.x, offset.y + .5 * inc.y);
-  vec3 p = texture(points, coord).xyz;
-  vec3 pp = texture(points, coord2).xyz;
-  float s = 1. - length(p.xyz) / 5.;
-  mat3 m = calcLookAtMatrix(p, pp, 0.);
-  p += m * position / 50.;
-  vNormal = normalMatrix * m * normal; 
-  gl_Position = projectionMatrix * modelViewMatrix * s * vec4(p, 1.);
-  float distance = .1 + .9 * length(p) / 5.;
-  vColor = texture(gradient, vec2(offset.y + .5 / 800., .5)).rgb;
-  vColor = rgb2hsv(vColor);
-  vColor.y += distance / 10.;
-  vColor.z = distance;
-  vColor = hsv2rgb(vColor);
-}`;
-
-const pointFs = `precision highp float;
-
-in vec3 vNormal;
-in vec3 vColor;
-
-out vec4 color;
-
-void main() {
-  vec3 n = normalize(vNormal);
-  vec3 l = normalize(vec3(1.));
-  float diffuse = .5 + .5 * max(0., dot(n, l));
-  color = vec4(vColor * diffuse, 1.);
-}`;
 
 const geo = new RoundedBoxGeometry(2, 2, step, 0.1, 1);
 geo.translate(0, 0, step / 2);
@@ -244,28 +187,20 @@ const palettes = [
   dragon,
 ];
 
-const pointMat = new RawShaderMaterial({
-  uniforms: {
-    points: { value: sim.texture },
-    gradient: { value: getTextureFromPalette(palettes[0]) },
-  },
-  vertexShader: pointVs,
-  fragmentShader: pointFs,
-  glslVersion: GLSL3,
-  side: DoubleSide,
-});
+const pointMat = new MeshNormalMaterial();
 
 const pointMesh = new InstancedMesh(geo, pointMat, LINES * POINTS);
 scene.add(pointMesh);
 
 function randomize() {
   const palette = palettes[Math.floor(Math.random() * palettes.length)];
-  pointMat.uniforms.gradient.value = getTextureFromPalette(palette);
+  ssao.shader.uniforms.gradient.value = getTextureFromPalette(palette);
   simShader.uniforms.noiseScale.value = randomInRange(0.5, 2);
   simShader.uniforms.persistence.value = randomInRange(1 / 200, 200);
   simShader.uniforms.reset.value = true;
 }
 
+randomize();
 let running = true;
 
 window.addEventListener("keydown", (e) => {
@@ -285,10 +220,10 @@ document.querySelector("#randomizeBtn").addEventListener("click", (e) => {
   randomize();
 });
 
-renderer.setClearColor(0xffffff, 1);
-
 const colorFBO = getFBO(1, 1, {}, true);
 camera.position.normalize().multiplyScalar(15);
+
+ssao.sim = sim.texture;
 
 function render() {
   if (running) {
@@ -304,7 +239,8 @@ function render() {
   renderer.render(scene, camera);
   renderer.setRenderTarget(null);
 
-  post.render(colorFBO.texture);
+  ssao.render(renderer, scene, camera);
+  post.render(ssao.output);
 
   renderer.setAnimationLoop(render);
 }
@@ -312,6 +248,7 @@ function render() {
 function myResize(w, h, dpr) {
   colorFBO.setSize(w * dpr, h * dpr);
   post.setSize(w, h, dpr);
+  ssao.setSize(w, h, dpr);
 }
 addResize(myResize);
 
