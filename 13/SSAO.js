@@ -101,7 +101,7 @@ void main() {
   float f = rimPower * abs( dot( n, normalize( vPosition ) ) );
   f = clamp( 0., 1., useRim * ( 1. - smoothstep( 0.0, 1., f ) ) );
   color.rgb = mix(color.rgb, background, 1.* f);
-
+  
   float d = linearizeDepth(length( vPosition ));
   position = vec4(vPosition, d);
   normal = vec4(n, 1.);
@@ -210,6 +210,7 @@ void main() {
   // vec3 finalColor = hsv2rgb(hsl);
 
 	fragColor = vec4(finalColor.rgb, 1. );
+
 }`;
 
 class SSAO {

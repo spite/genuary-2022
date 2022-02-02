@@ -8,7 +8,6 @@ import {
 } from "../modules/renderer.js";
 import {
   DataTexture,
-  DoubleSide,
   FloatType,
   GLSL3,
   InstancedBufferAttribute,
@@ -37,10 +36,9 @@ import {
   dragon,
 } from "../modules/palettes.js";
 import { Post } from "./post.js";
-import { getFBO } from "../modules/fbo.js";
-import { shader as hsl } from "../shaders/hsl.js";
 import { GradientLinear } from "../modules/gradient-linear.js";
 import { SSAO } from "./SSAO.js";
+import { pointsOnSphere } from "../modules/Fibonacci.js";
 
 const post = new Post(renderer);
 const ssao = new SSAO();
@@ -178,12 +176,15 @@ const pointMesh = new InstancedMesh(geo, pointMat, LINES * POINTS);
 scene.add(pointMesh);
 
 function randomize() {
-  const d = randomInRange(1, 3);
+  const d = randomInRange(0.3, 1);
   const origins = new Float32Array(LINES * 3);
-  for (let i = 0; i < LINES; i++) {
-    origins[i * 3] = randomInRange(-d, d);
-    origins[i * 3 + 1] = randomInRange(-d, d);
-    origins[i * 3 + 2] = randomInRange(-d, d);
+  const points = pointsOnSphere(LINES);
+  let ptr = 0;
+  for (const pt of points) {
+    pt.multiplyScalar(d);
+    origins[ptr++] = pt.x;
+    origins[ptr++] = pt.y;
+    origins[ptr++] = pt.z;
   }
   const originTex = new DataTexture(
     origins,
@@ -202,7 +203,7 @@ function randomize() {
   const palette = palettes[Math.floor(Math.random() * palettes.length)];
   ssao.shader.uniforms.gradient.value = getTextureFromPalette(palette);
   simShader.uniforms.noiseScale.value = randomInRange(0.5, 2);
-  simShader.uniforms.persistence.value = randomInRange(1 / 200, 200);
+  simShader.uniforms.persistence.value = randomInRange(1, 200);
   simShader.uniforms.reset.value = true;
 }
 
@@ -226,7 +227,6 @@ document.querySelector("#randomizeBtn").addEventListener("click", (e) => {
   randomize();
 });
 
-const colorFBO = getFBO(1, 1, {}, true);
 camera.position.normalize().multiplyScalar(15);
 
 ssao.sim = sim.texture;
@@ -241,10 +241,6 @@ function render() {
     simShader.uniforms.reset.value = false;
   }
 
-  renderer.setRenderTarget(colorFBO);
-  renderer.render(scene, camera);
-  renderer.setRenderTarget(null);
-
   ssao.render(renderer, scene, camera);
   post.render(ssao.output);
 
@@ -252,7 +248,6 @@ function render() {
 }
 
 function myResize(w, h, dpr) {
-  colorFBO.setSize(w * dpr, h * dpr);
   post.setSize(w, h, dpr);
   ssao.setSize(w, h, dpr);
 }

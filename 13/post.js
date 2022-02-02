@@ -77,7 +77,6 @@ out vec4 fragColor;
 ${fxaa}
 
 void main() {
-  vec2 uv = .8 * (vUv - .5) + .5;
   fragColor = fxaa(inputTexture, vUv);
 }`;
 
