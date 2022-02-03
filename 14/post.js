@@ -85,7 +85,8 @@ ${chromaticAberration}
 void main() {
   vec2 size = vec2(textureSize(inputTexture, 0));
   vec2 delta = vec2(1.) * size.x / 50.;
-  vec4 c = chromaticAberration(inputTexture, vUv, .05, delta);
+  vec2 uv = (.5 - vUv) * .95 + .5;
+  vec4 c = chromaticAberration(inputTexture, uv, .05, delta);
   color = c;
 }`;
 
