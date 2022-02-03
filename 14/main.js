@@ -173,10 +173,22 @@ function getFibPoints(r) {
   };
 }
 
-function getRandPoints(r) {
+function getRandShellPoints(r) {
   const v = new Vector3();
   return (i) => {
-    v.set(randomInRange(-r, r), randomInRange(-r, r), randomInRange(-r, r));
+    v.set(randomInRange(-1, 1), randomInRange(-1, 1), randomInRange(-1, 1));
+    v.normalize().multiplyScalar(r);
+    return v;
+  };
+}
+
+function getRandVolPoints(r) {
+  const v = new Vector3();
+  return (i) => {
+    do {
+      v.set(randomInRange(-1, 1), randomInRange(-1, 1), randomInRange(-1, 1));
+    } while (v.length() > 1);
+    v.multiplyScalar(r);
     return v;
   };
 }
@@ -185,7 +197,7 @@ function randomPoints() {
   let ptr = 0;
 
   const r = randomInRange(4, 6);
-  const fns = [getFibPoints(r), getRandPoints(r)];
+  const fns = [getFibPoints(r), getRandShellPoints(r), getRandVolPoints(r)];
   const fn = fns[Math.floor(Math.random() * fns.length)];
 
   const positions = pointsTexture.image.data;
