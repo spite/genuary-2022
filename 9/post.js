@@ -146,9 +146,7 @@ class Post {
     this.bloomPass = new BloomPass(10, 5);
   }
 
-  setSize(w0, h0) {
-    const w = w0 * 1.2;
-    const h = h0 * 1.2;
+  setSize(w, h) {
     this.colorFBO.setSize(w, h);
     this.colorPass.setSize(w, h);
     this.finalPass.setSize(w, h);
