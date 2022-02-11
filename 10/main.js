@@ -164,8 +164,7 @@ function rot2d(x, y, a) {
 }
 
 const seed = randomInRange(-1000, 1000);
-function updateNoise() {
-  const t = performance.now() / 10000;
+function updateNoise(t) {
   const r = 5;
   const ox = seed + t + r * Math.cos(t);
   const oy = r * Math.sin(t);
@@ -308,10 +307,17 @@ const speed = new Vector3();
 const acc = new Vector3();
 
 let frames = 0;
+let time = 0;
+let prevTime = performance.now();
 
 function render() {
+  const t = performance.now();
+  const dt = t - prevTime;
+  prevTime = t;
+
   if (running) {
-    updateNoise();
+    time += dt / 10000;
+    updateNoise(time);
   }
 
   if (spinning) {
