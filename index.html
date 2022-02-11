@@ -3,6 +3,27 @@
   <head>
     <meta charset="utf-8" />
     <title>Genuary 2022</title>
+
+    <!-- Twitter Card data -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@thespite" />
+    <meta name="twitter:title" content="Genuary 2022" />
+    <meta name="twitter:description" content="All the demos for Genuary 2022" />
+    <meta name="twitter:creator" content="@thespite" />
+    <meta
+      name="twitter:image:src"
+      content="https://spite.github.io/genuary-2022/screenshots/genuary-17.jpg"
+    />
+
+    <!-- Open Graph data -->
+    <meta property="og:type" content="demo" />
+    <meta
+      property="og:image"
+      content="https://spite.github.io/genuary-2022/screenshots/genuary-17.jpg"
+    />
+    <meta property="og:description" content="All the demos for Genuary 2022" />
+    <meta property="og:site_name" content="Clicktorelease" />
+
     <meta name="viewport" content="initial-scale=1, maximum-scale=1" />
     <link href="./styles/styles.css" rel="stylesheet" />
     <style>
@@ -152,11 +173,25 @@
       div.day31 {
         background-image: url("screenshots/genuary-31.jpg");
       }
+      #index {
+        position: relative;
+      }
+      #index h1 {
+        margin-right: 4em;
+      }
+      #index tweet-button {
+        position: absolute;
+        right: 1.5em;
+        top: 1.5em;
+      }
     </style>
   </head>
   <body>
     <div id="index">
-      <h1>Genuary 2022</h1>
+      <h1>
+        Genuary 2022
+        <tweet-button></tweet-button>
+      </h1>
       <div class="cards">
         <div class="day1">
           <a href="./1"><h2>1. draw 10,000 of something</h2></a>
@@ -284,4 +319,5 @@
       <p>Follow me on <a href="https://twitter.com/thespite">twitter</a></p>
     </div>
   </body>
+  <script src="/modules/tweet-button.js" type="module"></script>
 </html>
