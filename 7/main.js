@@ -191,6 +191,9 @@ void main() {
   color = vec4(vec3(l), 1.);
 }`;
 
+let icosahedronGeometry;
+let mesh;
+
 const loader = new TextureLoader();
 
 const envMap = loader.load("../assets/kiara_interior_2k.jpg");
@@ -245,8 +248,6 @@ function generateTorusKnot() {
   return geo;
 }
 
-const icosahedronGeometry = await loadIcosahedron();
-
 function generateIcosahedron() {
   material.uniforms.frequency.value = Math.round(randomInRange(1, 5));
   material.uniforms.disturb1.value = randomInRange(0.1, 1);
@@ -254,9 +255,6 @@ function generateIcosahedron() {
   const geo = rotate(icosahedronGeometry);
   return geo;
 }
-
-const mesh = new Mesh(generateSphere(), material);
-scene.add(mesh);
 
 function randomize() {
   const s = Math.floor(Math.random() * 4);
@@ -315,5 +313,12 @@ function myResize(w, h, dpr) {
 }
 addResize(myResize);
 
+async function init() {
+  icosahedronGeometry = await loadIcosahedron();
+  mesh = new Mesh(generateSphere(), material);
+  scene.add(mesh);
+  render();
+}
+
 resize();
-render();
+init();
