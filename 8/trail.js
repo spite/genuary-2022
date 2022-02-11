@@ -47,6 +47,7 @@ class Trail {
       lineWidth: 0.275 * width,
       color: this.color,
       sizeAttenuation: true,
+      borderWidth: 0,
       // wireframe: true,
       resolution: new Vector2(window.innerWidth, window.innerHeight),
     });
