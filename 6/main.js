@@ -46,6 +46,7 @@ function prepareMesh(points, w, color) {
     lineWidth: w,
     near: camera.near,
     far: camera.far,
+    borderWidth: 0,
   });
 
   var mesh = new Mesh(g, material);
