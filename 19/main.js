@@ -1,3 +1,4 @@
+import {} from "./PathSeg.js";
 import {
   addResize,
   resize,
