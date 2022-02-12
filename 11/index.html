@@ -3,6 +3,33 @@
   <head>
     <meta charset="utf-8" />
     <title>Genuary 2022 - Day 11 - No computer</title>
+
+    <!-- Twitter Card data -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@thespite" />
+    <meta name="twitter:title" content="Genuary 2022 - Day 11 - No computer" />
+    <meta
+      name="twitter:description"
+      content="Some algorithmic drawings with dice, pencil and ink"
+    />
+    <meta name="twitter:creator" content="@thespite" />
+    <meta
+      name="twitter:image:src"
+      content="https://spite.github.io/genuary-2022/screenshots/genuary-11-1.jpg"
+    />
+
+    <!-- Open Graph data -->
+    <meta property="og:type" content="demo" />
+    <meta
+      property="og:image"
+      content="https://spite.github.io/genuary-2022/screenshots/genuary-11-1.jpg"
+    />
+    <meta
+      property="og:description"
+      content="Some algorithmic drawings with dice, pencil and ink"
+    />
+    <meta property="og:site_name" content="Clicktorelease" />
+
     <meta name="viewport" content="initial-scale=1, maximum-scale=1" />
     <link href="../styles/styles.css" rel="stylesheet" />
     <style>
@@ -22,12 +49,23 @@
       .content img {
         width: 100%;
       }
+      #info {
+        position: relative;
+      }
+      #info h1 {
+        margin-right: 4em;
+      }
+      #info tweet-button {
+        position: absolute;
+        right: 1.5em;
+        top: 1.5em;
+      }
     </style>
   </head>
   <body class="contrast">
     <div id="info">
       <h2>Genuary 2022</h2>
-      <h1>11. No computer</h1>
+      <h1>11. No computer<tweet-button></tweet-button></h1>
     </div>
     <div class="content">
       <img src="genuary-11-1.jpg" />
@@ -38,4 +76,5 @@
     </div>
     <footer><a href="../">More Genuary</a></footer>
   </body>
+  <script src="../modules/tweet-button.js" type="module"></script>
 </html>
