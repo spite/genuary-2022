@@ -49,6 +49,7 @@ function prepareMesh(w, c) {
     depthTest: true,
     transparent: true,
     opacity: 1,
+    borderWidth: 0,
     dashOffset: 0,
   });
 
