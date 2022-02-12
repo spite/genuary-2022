@@ -3320,7 +3320,7 @@ void main() {
   b +=  8.*b3 / 40.;
   b +=  16.*b4 / 40.;
 
-  fragColor = screen(color, b, .5);
+  fragColor = screen(color, b, 1.);
   fragColor *= vignette(vUv, vignetteBoost, vignetteReduction);
   fragColor += .01 * noise(gl_FragCoord.xy + vec2(time, 0.));
 }
