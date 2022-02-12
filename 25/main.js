@@ -48,7 +48,7 @@ const r = 20;
 const dummy = new Object3D();
 const positions = [];
 const nextPositions = [];
-const colors = [];
+
 for (let i = 0; i < BOXES; i++) {
   dummy.position.set(
     randomInRange(-r, r),
