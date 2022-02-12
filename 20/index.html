@@ -3,6 +3,36 @@
   <head>
     <meta charset="utf-8" />
     <title>Genuary 2022 - Day 20 - Make a sea of shapes</title>
+
+    <!-- Twitter Card data -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@thespite" />
+    <meta
+      name="twitter:title"
+      content="Genuary 2022 - Day 20 - Make a sea of shapes"
+    />
+    <meta
+      name="twitter:description"
+      content="An ocean of hexagonal pillars, the bestagonal pillars"
+    />
+    <meta name="twitter:creator" content="@thespite" />
+    <meta
+      name="twitter:image:src"
+      content="https://spite.github.io/genuary-2022/screenshots/genuary-20.jpg"
+    />
+
+    <!-- Open Graph data -->
+    <meta property="og:type" content="demo" />
+    <meta
+      property="og:image"
+      content="https://spite.github.io/genuary-2022/screenshots/genuary-20.jpg"
+    />
+    <meta
+      property="og:description"
+      content="An ocean of hexagonal pillars, the bestagonal pillars"
+    />
+    <meta property="og:site_name" content="Clicktorelease" />
+
     <meta name="viewport" content="initial-scale=1, maximum-scale=1" />
     <link href="../styles/styles.css" rel="stylesheet" />
   </head>
@@ -22,8 +52,10 @@
       <p>
         Made with <a target="blank" href="https://threejs.org/">three.js</a>.
       </p>
+      <tweet-button></tweet-button>
     </div>
     <footer><a href="../">More Genuary</a></footer>
   </body>
-  <script src="main.js" type="module"></script>
+  <script src="../modules/tweet-button.js" type="module"></script>
+  <script src="bundle.js" type="module"></script>
 </html>
