@@ -199,6 +199,8 @@ void main() {
 
   float shade = length(findBorder(map, uvBorder, size, .1).rgb);
   fragColor.rgb *= 1. - .1 * vec3(shade);
+
+  // fragColor = vec4(vec3(srcG.g * up * inkUp * aG + srcB.b * left * inkLeft  * aB + srcR.r * right * inkRight * aR), 1.);
 }`;
 
 const loader = new TextureLoader();
