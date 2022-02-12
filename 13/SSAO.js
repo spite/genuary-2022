@@ -229,7 +229,6 @@ class SSAO {
         gradient: { value: null },
         background: { value: null },
         points: { value: null },
-        gradient: { value: null },
         time: { value: 0 },
       },
       vertexShader,
