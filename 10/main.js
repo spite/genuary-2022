@@ -306,6 +306,12 @@ document.querySelector("#spinBtn").addEventListener("click", (e) => {
 const speed = new Vector3();
 const acc = new Vector3();
 
+// the ball is integrated once per 60fps frame, so it advances on a fixed
+// accumulator rather than once per drawn frame
+const STEP = 1000 / 60;
+const MAX_STEPS = 4;
+let accumulator = 0;
+
 let frames = 0;
 let time = 0;
 let prevTime = performance.now();
@@ -314,6 +320,9 @@ function render() {
   const t = performance.now();
   const dt = t - prevTime;
   prevTime = t;
+  // elapsed time in 60fps frames
+  const delta = Math.min(dt, 100) / STEP;
+  accumulator += Math.min(dt, 200);
 
   if (running) {
     time += dt / 10000;
@@ -321,27 +330,33 @@ function render() {
   }
 
   if (spinning) {
-    group.rotation.y -= 0.001;
+    group.rotation.y -= 0.001 * delta;
   }
 
-  speed.add(dir);
-  ball.position.add(speed);
-  acc.multiplyScalar(0.99);
-  speed.multiplyScalar(0.99);
+  let steps = 0;
+  while (accumulator >= STEP && steps < MAX_STEPS) {
+    speed.add(dir);
+    ball.position.add(speed);
+    acc.multiplyScalar(0.99);
+    speed.multiplyScalar(0.99);
 
-  ball.position.x = clamp(ball.position.x, -0.5, 0.5);
-  ball.position.z = clamp(ball.position.z, -0.5, 0.5);
+    ball.position.x = clamp(ball.position.x, -0.5, 0.5);
+    ball.position.z = clamp(ball.position.z, -0.5, 0.5);
 
-  let by = W - Math.round((ball.position.z + 0.5) * W);
-  let bx = Math.round((ball.position.x + 0.5) * H);
-  bx = clamp(bx, 1, W - 2);
-  by = clamp(by, 1, H - 2);
+    const by = W - Math.round((ball.position.z + 0.5) * W);
+    const bx = clamp(Math.round((ball.position.x + 0.5) * H), 1, W - 2);
+    const byc = clamp(by, 1, H - 2);
 
-  const y = data[(by * W + bx) * 3];
-  ball.position.y = 0.5 * (y - 0.5) + 0.02;
+    const y = data[(byc * W + bx) * 3];
+    ball.position.y = 0.5 * (y - 0.5) + 0.02;
 
-  getGradient(bx, by, y, dir);
-  acc.lerp(dir, 0.1);
+    getGradient(bx, byc, y, dir);
+    acc.lerp(dir, 0.1);
+
+    accumulator -= STEP;
+    steps++;
+  }
+  if (steps === MAX_STEPS) accumulator = 0;
 
   arrowHelper.position.copy(ball.position);
   arrowHelper.setDirection(dir);

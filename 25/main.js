@@ -224,7 +224,21 @@ let time = 0;
 const q = new Quaternion();
 let frames = 0;
 
+// the blocks shuffle once per 60fps frame, so that runs on a fixed accumulator
+// rather than once per drawn frame
+const STEP = 1000 / 60;
+const MAX_STEPS = 4;
+let accumulator = 0;
+let stepPrevTime = performance.now();
+
 function render() {
+  const stepNow = performance.now();
+  const stepDt = Math.min(stepNow - stepPrevTime, 200);
+  stepPrevTime = stepNow;
+  accumulator += stepDt;
+  // elapsed time in 60fps frames
+  const delta = Math.min(stepDt, 100) / STEP;
+
   const t = performance.now() / 5000;
   if (running) {
     time += t - prevTime;
@@ -243,13 +257,19 @@ function render() {
 
     q.set(target.x, target.y, target.z, 1).normalize();
 
-    cubeCamera.quaternion.slerp(q, 0.1);
+    cubeCamera.quaternion.slerp(q, 1 - (1 - 0.1) ** delta);
     cubeCamera.position.copy(camera.position);
 
-    for (let i = 0; i < 10; i++) {
-      randomMoveBlock();
+    let steps = 0;
+    while (accumulator >= STEP && steps < MAX_STEPS) {
+      for (let i = 0; i < 10; i++) {
+        randomMoveBlock();
+      }
+      update();
+      accumulator -= STEP;
+      steps++;
     }
-    update();
+    if (steps === MAX_STEPS) accumulator = 0;
   }
 
   cubeCamera.update(renderer, scene);

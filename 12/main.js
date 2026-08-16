@@ -419,15 +419,45 @@ const center = new Vector3(0, 0, 0);
 const up = new Vector3(0, 1, 0);
 const oscillation = new Vector3();
 
+// The spheres grow, die and get replaced once per 60fps frame. That whole
+// cycle now advances at a fixed rate instead of once per drawn frame -- on a
+// 240Hz display it used to run four times too fast. Lower SIM_HZ for a calmer
+// churn, raise it for a busier one.
+const SIM_HZ = 60;
+const STEP = 1000 / SIM_HZ;
+const MAX_STEPS = 4;
+let accumulator = 0;
+let stepPrevTime = performance.now();
+
+function simulationStep() {
+  remove();
+  for (const s of spheres) {
+    s.grow();
+  }
+}
+
 let frames = 0;
 
 function render() {
   frames++;
-  group.rotation.y += 0.01;
+
+  const stepNow = performance.now();
+  const stepDt = Math.min(stepNow - stepPrevTime, 200);
+  stepPrevTime = stepNow;
+  accumulator += stepDt;
+  // elapsed time in 60fps frames
+  const delta = Math.min(stepDt, 100) / STEP;
+
+  group.rotation.y += 0.01 * delta;
   // if (frames % 10 === 0) {
   // if (!removing) {
   // console.log("remove", spheres.length);
-  remove();
+  // growth and replacement are discrete, visible events, so at most one step
+  // runs per frame -- catching up in bursts pops several spheres at once
+  if (accumulator >= STEP) {
+    simulationStep();
+    accumulator = 0;
+  }
   // }
   // }
 
@@ -468,9 +498,6 @@ function render() {
   ringMesh.instanceMatrix.needsUpdate = true;
   spheresMesh.instanceMatrix.needsUpdate = true;
 
-  for (const s of spheres) {
-    s.grow();
-  }
   post.render(scene, camera);
 
   // capture(renderer.domElement);

@@ -153,19 +153,25 @@ document.querySelector("#randomizeBtn").addEventListener("click", (e) => {
 
 let time = 0;
 let prevTime = performance.now();
+let sinceRandomize = 0;
 
 function render() {
-  if (frames % 120 === 0) {
-    randomize();
-  }
-
   const t = performance.now();
   const dt = t - prevTime;
   prevTime = t;
+  // elapsed time in 60fps frames, so the easing runs at a fixed rate
+  const delta = Math.min(dt, 100) / (1000 / 60);
+
+  // used to fire every 120 frames, which is every two seconds only at 60fps
+  sinceRandomize += Math.min(dt, 200);
+  if (sinceRandomize >= 2000) {
+    randomize();
+    sinceRandomize = 0;
+  }
 
   if (running) {
-    curSpeed += (speed - curSpeed) * 0.9;
-    curHeight += (height - curHeight) * 0.1;
+    curSpeed += (speed - curSpeed) * (1 - (1 - 0.9) ** delta);
+    curHeight += (height - curHeight) * (1 - (1 - 0.1) ** delta);
     time += (curSpeed * dt) / 1000;
     ssao.time = time;
     ssao.height = curHeight;

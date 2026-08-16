@@ -231,14 +231,30 @@ camera.position.normalize().multiplyScalar(15);
 
 ssao.sim = sim.texture;
 
-function render() {
-  if (running) {
-    simShader.uniforms.map.value = sim.fbos[sim.currentFBO].texture;
+// the simulation advances one step per 60fps frame, so it runs on a fixed
+// accumulator rather than once per drawn frame
+const STEP = 1000 / 60;
+const MAX_STEPS = 4;
+let accumulator = 0;
+let stepPrevTime = performance.now();
 
-    let time = performance.now() / 1000;
-    simShader.uniforms.time.value = time;
-    sim.render(renderer);
-    simShader.uniforms.reset.value = false;
+function render() {
+  const stepNow = performance.now();
+  accumulator += Math.min(stepNow - stepPrevTime, 200);
+  stepPrevTime = stepNow;
+
+  if (running) {
+    let steps = 0;
+    while (accumulator >= STEP && steps < MAX_STEPS) {
+      // the pass swaps its buffers but doesn't rebind its input
+      simShader.uniforms.map.value = sim.fbos[sim.currentFBO].texture;
+      simShader.uniforms.time.value = performance.now() / 1000;
+      sim.render(renderer);
+      simShader.uniforms.reset.value = false;
+      accumulator -= STEP;
+      steps++;
+    }
+    if (steps === MAX_STEPS) accumulator = 0;
   }
 
   ssao.render(renderer, scene, camera);

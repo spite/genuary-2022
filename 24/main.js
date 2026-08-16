@@ -268,13 +268,30 @@ function update() {
   mesh2.instanceMatrix.needsUpdate = true;
 }
 
+// the state below advances once per 60fps frame, so it runs on a fixed
+// accumulator rather than once per drawn frame
+const STEP = 1000 / 60;
+const MAX_STEPS = 4;
+let accumulator = 0;
+let stepPrevTime = performance.now();
+
 let frames = 0;
 
 function render() {
+  const stepNow = performance.now();
+  accumulator += Math.min(stepNow - stepPrevTime, 200);
+  stepPrevTime = stepNow;
+
   if (running) {
-    group.rotation.y += 0.001;
-    group.rotation.x += 0.0001;
-    update();
+    let steps = 0;
+    while (accumulator >= STEP && steps < MAX_STEPS) {
+      group.rotation.y += 0.001;
+      group.rotation.x += 0.0001;
+      update();
+      accumulator -= STEP;
+      steps++;
+    }
+    if (steps === MAX_STEPS) accumulator = 0;
   }
   ssao.render(renderer, scene, camera);
   post.render(ssao.output);

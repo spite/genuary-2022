@@ -474,11 +474,30 @@ camera.position.normalize().multiplyScalar(20);
 
 renderer.setClearColor(0x101010, 1);
 
+// the particle simulation advances one step per 60fps frame, so it runs on a
+// fixed accumulator rather than once per drawn frame
+const STEP = 1000 / 60;
+const MAX_STEPS = 4;
+let accumulator = 0;
+let stepPrevTime = performance.now();
+
 function render() {
+  const stepNow = performance.now();
+  accumulator += Math.min(stepNow - stepPrevTime, 200);
+  stepPrevTime = stepNow;
+
   if (running) {
-    particlePass.render(renderer);
-    particleShader.uniforms.time.value = performance.now() / 10000;
-    particleShader.uniforms.map.value = particlePass.texture;
+    let steps = 0;
+    while (accumulator >= STEP && steps < MAX_STEPS) {
+      particleShader.uniforms.time.value = performance.now() / 10000;
+      particlePass.render(renderer);
+      // the pass swaps its buffers but doesn't rebind its input
+      particleShader.uniforms.map.value = particlePass.texture;
+      accumulator -= STEP;
+      steps++;
+    }
+    if (steps === MAX_STEPS) accumulator = 0;
+
     pointMaterial.uniforms.points.value = particlePass.texture;
     distanceShader.uniforms.points.value = particlePass.texture;
     lineMaterial.uniforms.points.value = particlePass.texture;

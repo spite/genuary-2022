@@ -317,8 +317,11 @@ let prevTime = performance.now();
 
 async function render() {
   const t = performance.now();
-  time += t - prevTime;
+  const frameDt = t - prevTime;
+  time += frameDt;
   prevTime = t;
+  // elapsed time in 60fps frames, so the head-turn easing is framerate independent
+  const frameDelta = Math.min(frameDt, 100) / (1000 / 60);
 
   if (running) {
     await gum.ready();
@@ -351,7 +354,7 @@ async function render() {
     }
   }
 
-  angle += (angleTo - angle) * 0.1;
+  angle += (angleTo - angle) * (1 - (1 - 0.1) ** frameDelta);
   mesh.rotation.y = angle;
 
   renderer.setRenderTarget(height);

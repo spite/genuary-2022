@@ -318,7 +318,18 @@ document.querySelector("#randomizeBtn").addEventListener("click", (e) => {
   randomize();
 });
 
+// the blocks shuffle once per 60fps frame, so that runs on a fixed accumulator
+// rather than once per drawn frame
+const STEP = 1000 / 60;
+const MAX_STEPS = 4;
+let accumulator = 0;
+let stepPrevTime = performance.now();
+
 function render() {
+  const stepNow = performance.now();
+  accumulator += Math.min(stepNow - stepPrevTime, 200);
+  stepPrevTime = stepNow;
+
   const t = performance.now() / 5000;
   if (running) {
     time += t - prevTime;
@@ -340,7 +351,13 @@ function render() {
     camera.quaternion.copy(q);
     pointLight.position.copy(camera.position);
 
-    updateScene();
+    let steps = 0;
+    while (accumulator >= STEP && steps < MAX_STEPS) {
+      updateScene();
+      accumulator -= STEP;
+      steps++;
+    }
+    if (steps === MAX_STEPS) accumulator = 0;
   }
 
   // renderer.render(scene, camera);

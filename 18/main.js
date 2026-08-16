@@ -264,10 +264,12 @@ function render() {
   const t = performance.now();
   const dt = t - prevTime;
   prevTime = t;
+  // elapsed time in 60fps frames, so the easing runs at a fixed rate
+  const delta = Math.min(dt, 100) / (1000 / 60);
 
   if (running) {
     time += dt / 10000;
-    object.rotation.y += 0.01;
+    object.rotation.y += 0.01 * delta;
     invalidate = true;
   }
   if (invalidate) {

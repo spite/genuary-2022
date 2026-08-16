@@ -275,14 +275,31 @@ const controls = getControls();
 
 let processed = false;
 
+// the state below advances once per 60fps frame, so it runs on a fixed
+// accumulator rather than once per drawn frame
+const STEP = 1000 / 60;
+const MAX_STEPS = 4;
+let accumulator = 0;
+let stepPrevTime = performance.now();
+
 function render() {
+  const stepNow = performance.now();
+  accumulator += Math.min(stepNow - stepPrevTime, 200);
+  stepPrevTime = stepNow;
+
   if (venation && running) {
     if (venation.activeNodes.length) {
-      for (let i = 0; i < 1; i++) {
+      let steps = 0;
+      while (accumulator >= STEP && steps < MAX_STEPS) {
         venation.step();
+        accumulator -= STEP;
+        steps++;
       }
-      draw();
-      drawLeaves();
+      if (steps === MAX_STEPS) accumulator = 0;
+      if (steps) {
+        draw();
+        drawLeaves();
+      }
     }
   }
   post.render(scene, camera);
